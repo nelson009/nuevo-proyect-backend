@@ -1,0 +1,20 @@
+[
+  {
+    "title": "samsung 4",
+    "price": 4,
+    "thumbnail": "https://images.fravega.com/s250/c85140313a6c3e17f406cb82311a756a.jpg.webp",
+    "id": 1
+  },
+  {
+    "title": "samsung 1",
+    "price": 2,
+    "thumbnail": "https://images.fravega.com/s250/c85140313a6c3e17f406cb82311a756a.jpg.webp",
+    "id": 2
+  },
+  {
+    "title": "samsung 3",
+    "price": 3,
+    "thumbnail": "https://images.fravega.com/s250/c85140313a6c3e17f406cb82311a756a.jpg.webp",
+    "id": 3
+  }
+]
