@@ -1,12 +1,12 @@
-const {generadorId, obtenerIndice} = require('../funcionesUtiles/funciones')
+const {generadorId, obtenerIndice} = require('../../funcionesUtiles/funciones')
 
-class Memoria {
+class MemoriaApi {
     constructor(){
         this.Products = [];
     }
 
     getProduct(){
-
+        
         return this.Products;
     };
 
@@ -42,4 +42,4 @@ class Memoria {
 
 }
 
-module.exports = Memoria
+module.exports = MemoriaApi

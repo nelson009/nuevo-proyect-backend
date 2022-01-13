@@ -1,0 +1,27 @@
+<h1 class="silver animate__animated animate__zoomIn container">Vista de Productos</h1>
+<% if (products.length === 0) { %>
+<div class="container bordeBlanco">
+<h2 class="sub-titulo">No hay productos</h2>
+</div>
+<% } else { %>
+<div class=" container bordeBlanco mt-5">
+    <table border="1" class="table table-dark table-hover">
+        <thead>
+          <tr class="thead-light">
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Foto</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% products.map(producto => { %>
+            <tr>
+                <td><%= producto.title %></td>
+                <td><%= producto.price %></td>
+                <td><img src="<%= producto.thumbnail %>"height="30" width="30" ></td>
+            </tr>
+          <% }); %>
+        </tbody>
+    </table>
+<% } %>
+</div>
