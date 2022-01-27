@@ -1,14 +1,14 @@
-const fs = require('fs/promises')
+const fs = require('fs')
 
 class Mensaje {
     constructor(){
         this.Mensaje = [];
-        this.nameArchivo = './persistenciaFs/mensajes.txt'
+        this.nameArchivo = './data/persistenciaFs/mensajes.txt';
     }
 
     async readMessage () {
         try{
-            const data = await fs.readFile(this.nameArchivo,"utf-8")
+            const data = await fs.promises.readFile(this.nameArchivo,"utf-8")
 
             return data
         } catch (error){
@@ -23,7 +23,7 @@ class Mensaje {
             // await fs.writeFile(this.nameArchivo,JSON.stringify( messageParce,null,2));
 
             this.Mensaje.push(obj)
-            await fs.writeFile(this.nameArchivo,JSON.stringify( this.Mensaje,null,2));
+            await fs.promises.writeFile(this.nameArchivo,JSON.stringify( this.Mensaje,null,2));
          
         } catch (error){
             console.log(error.message)

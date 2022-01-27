@@ -2,9 +2,12 @@ const path = require('path');
 const express = require('express');
 const http = require('http');
 const { engine } = require('express-handlebars');
-const { memoria } = require('./controllers/productos.controllers');
+// const { memoria } = require('./controllers/productos.controllers');
+const { productosApi } = require('./controllers/productos.controllers')
 const { Mensaje } = require("./models/index");
 const rutasApi = require('./router/app.routers');
+const OnlyAdminsPrivilege = require('./middleware/autorizacion');
+const ErrorHandling = require('./middleware/errorHandling')
 
 const app = express();
 const server = http.createServer(app);
@@ -26,11 +29,13 @@ app.set('view engine', 'handlebars');
 app.set('views', './views');
 
 //Rutas
-app.use('/api', rutasApi);
+
+app.use('/api', OnlyAdminsPrivilege, rutasApi);
+app.use('*', ErrorHandling)
 
 io.on('connection', async socket => {
     console.log('connection');
-    io.sockets.emit('tableProduct', memoria.getProduct())
+    io.sockets.emit('tableProduct', await productosApi.getProduct())
     io.sockets.emit("chat", await mensaje.getMessage())
 
     socket.on("messageFront",async data => {

@@ -1,5 +1,4 @@
 const {generadorId, obtenerIndice} = require('../../funcionesUtiles/funciones')
-
 class MemoriaApi {
     constructor(){
         this.Products = [];
@@ -17,19 +16,22 @@ class MemoriaApi {
     };
 
     addProduct(Product){
-        const nuevoProducto = ({...Product, id : generadorId( this.Products, this.Products[0])});
+        const nuevoProducto = ({...Product, id : generadorId( this.Products, this.Products[0]),timestamp: Date.now()});
         this.Products.push(nuevoProducto);
 
         return nuevoProducto;
     };
 
     updateProduct(productNuevo,id){
-        const {title, price, thumbnail} = productNuevo
+        const {nombre, descripcion, codigo, foto, precio, stock} = productNuevo
         const ProductoActualizado = {
             ...this.Products[obtenerIndice(this.Products,id)],
-            title,
-            price,
-            thumbnail
+            nombre,
+            descripcion,
+            codigo,
+            foto,
+            precio,
+            stock
         };
         this.Products[obtenerIndice(this.Products,id)] = ProductoActualizado;
 
@@ -41,5 +43,6 @@ class MemoriaApi {
     }
 
 }
+
 
 module.exports = MemoriaApi

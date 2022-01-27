@@ -1,15 +1,16 @@
-const { MemoriaApi } = require('../models/index')
+const { ProductosFs } = require('../models/index')
+// const { MemoriaApi } = require('../models/index')
 
-const memoria = new MemoriaApi();
+const productosApi = new ProductosFs();
 
-const listarProductosController = (req, res) => {
-    const products =  memoria.getProduct()
+const listarProductosController = async (req, res) => {
+    const products = await productosApi.getProduct()
     res.render('main', {products})
 }
 
-const listarProductoIdController = (req, res) => {
+const  listarProductoIdController = async (req, res) => {
     const {id} = req.params;
-    const producto = memoria.getProductId(id)
+    const producto = await productosApi.getProductId(id)
     if(!producto){
 
        return res.status(404).send({error: 'producto no encontrado'})
@@ -17,37 +18,37 @@ const listarProductoIdController = (req, res) => {
     res.status(200).json(producto)
 }
 
-const guardarProductoController = (req , res) => {
+const guardarProductoController = async (req , res) => {
     const newProduct = req.body;
     console.log(newProduct)
-    if( !newProduct.title || !newProduct.price || !newProduct.thumbnail){
+    if( !newProduct.nombre || !newProduct.precio || !newProduct.foto){
 
         return  res.status(404).send({error: 'producto no encontrado'})
     }
-    memoria.addProduct(newProduct)
+    await productosApi.addProduct(newProduct)
 
     res.redirect('/')
 }
 
-const actualizarProductoController = (req, res) => {
+const actualizarProductoController = async (req, res) => {
     const {id} = req.params;
     const newProduct = req.body
-    const producto = memoria.getProductId(id)
-    if(!producto || !newProduct.title || !newProduct.price || !newProduct.thumbnail){
+    const producto = await productosApi.getProductId(id)
+    if(!producto ||  !newProduct.nombre || !newProduct.precio || !newProduct.foto || !newProduct.descripcion || !newProduct.codigo || !newProduct.stock){
 
         return  res.status(404).send({error: 'producto no encontrado'})
     }
-    res.json(memoria.updateProduct(newProduct, id))
+    res.json(await productosApi.updateProduct(newProduct, id))
 }
 
-const eliminarProductoController = (req, res) => {
+const eliminarProductoController = async (req, res) => {
     const {id} = req.params;
-    const producto = memoria.getProductId(id)
+    const producto = await productosApi.getProductId(id)
     if(!producto){
 
         return res.status(404).send({error: 'producto no encontrado'})
     }
-    memoria.deleteProduct(id)
+    await productosApi.deleteProduct(id)
 
     res.json('producto eliminado correctamente')
 }
@@ -58,5 +59,5 @@ module.exports = {
     guardarProductoController,
     actualizarProductoController,
     eliminarProductoController,
-    memoria,
+    productosApi,
 }
