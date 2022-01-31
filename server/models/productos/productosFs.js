@@ -34,6 +34,8 @@ class ProductosFs {
             const nuevoProducto = ({...product,id: generadorId(data,data[0]),timestamp: Date.now() })
             data.push(nuevoProducto)
             await fs.promises.writeFile(this.nombreArchivo,JSON.stringify( data,null,2))
+
+            return nuevoProducto
         } catch (error) {
             console.log(error)
         }

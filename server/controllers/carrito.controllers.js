@@ -37,13 +37,10 @@ const guardarProductosEnCarrito = async (req, res) => {
 
 const eliminarProductoPorIDEnCarrito = async (req,res) => {
     const { id, id_prod } = req.params;
-    const productId = await productosApi.getProductId(id_prod)
-    const idCarrito = await carrito.readCarrito()
-    if(!productId || idCarrito.id !== +id){
+    const productoEnCarritoEliminado = await carrito.deleteProductDeCarrito( id,id_prod );
+    if( productoEnCarritoEliminado  ) return res.status(404).send( productoEnCarritoEliminado.error );
 
-        return res.status(404).send({error: `El producto con id ${id} o el carrito con id ${idCarrito.id} no existe`})
-    }
-    res.status(200).json(await carrito.deleteProductDeCarrito(id,id_prod))
+    return res.json( productoEnCarritoEliminado );
 }
 
 module.exports = {

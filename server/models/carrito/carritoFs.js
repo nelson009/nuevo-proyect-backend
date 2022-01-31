@@ -1,4 +1,3 @@
-const { obtenerIndice, generadorId } = require("../../funcionesUtiles/funciones")
 const fs = require("fs");
 
 class CarritoFs {
@@ -63,6 +62,8 @@ class CarritoFs {
             const data = await this.readCarrito()
             data.productos.push(newProduct)
             await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(data,null,2))
+
+            return newProduct
         } catch (error) {
            console.log(error)
         }
@@ -72,12 +73,12 @@ class CarritoFs {
     async deleteProductDeCarrito (idCart,idProduct) {
         try {
             const data = await this.readCarrito()
-            // if( data.id === +idCart ) {
-                data.productos.splice(obtenerIndice(data.productos,idProduct),1)
-                await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(data,null,2))
+            const indice = data.productos.findIndex( prod => prod.id === +idProduct)
+            if ( data.id  !== +idCart ) return { error: `El carrito con id ${idCart} no existe` }
+            if ( indice < 0 ) return { error: `El producto con id ${idProduct} no existe` }
+            data.productos.splice(indice, 1)
 
-                return  console.log('producto elimiado del carrito exitosamente')
-            // }
+            return await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(data,null,2))
         } catch (error) {
             console.log(error.message)
         }

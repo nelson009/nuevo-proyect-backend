@@ -6,7 +6,6 @@ const { engine } = require('express-handlebars');
 const { productosApi } = require('./controllers/productos.controllers')
 const { Mensaje } = require("./models/index");
 const rutasApi = require('./router/app.routers');
-const OnlyAdminsPrivilege = require('./middleware/autorizacion');
 const ErrorHandling = require('./middleware/errorHandling')
 
 const app = express();
@@ -30,7 +29,7 @@ app.set('views', './views');
 
 //Rutas
 
-app.use('/api', OnlyAdminsPrivilege, rutasApi);
+app.use('/api', rutasApi);
 app.use('*', ErrorHandling)
 
 io.on('connection', async socket => {

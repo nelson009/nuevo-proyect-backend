@@ -1,4 +1,5 @@
 const express = require('express');
+const OnlyAdminsPrivilege = require('../../middleware/autorizacion')
 const{
     listarProductosController,
     listarProductoIdController,
@@ -12,10 +13,10 @@ router.get('/', listarProductosController);
 
 router.get('/:id', listarProductoIdController);
 
-router.post('/', guardarProductoController);
+router.post('/',OnlyAdminsPrivilege, guardarProductoController);
 
-router.put('/:id', actualizarProductoController);
+router.put('/:id',OnlyAdminsPrivilege, actualizarProductoController);
 
-router.delete('/:id', eliminarProductoController);
+router.delete('/:id',OnlyAdminsPrivilege, eliminarProductoController);
 
 module.exports = router;
