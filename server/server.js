@@ -4,7 +4,8 @@ const http = require('http');
 const { engine } = require('express-handlebars');
 // const { memoria } = require('./controllers/productos.controllers');
 const { productosApi } = require('./controllers/productos.controllers')
-const { Mensaje } = require("./models/index");
+// const { Mensaje } = require("./models/index");
+const { MensajeSqlite3 } = require('./models/index');
 const rutasApi = require('./router/app.routers');
 const ErrorHandling = require('./middleware/errorHandling')
 
@@ -12,7 +13,14 @@ const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
 const PORT = process.env.PORT || 8080;
-const mensaje = new Mensaje();
+
+const mensaje = new MensajeSqlite3('mensajes', {
+    client: 'sqlite3',
+    connection: {
+        filename: './DB/ecommerce.sqlite'
+    },
+    useNullAsDefault: true
+});
 
 // Middlewares
 app.use(express.static(path.resolve(__dirname, './public')));
@@ -30,16 +38,16 @@ app.set('views', './views');
 //Rutas
 
 app.use('/api', rutasApi);
-app.use('*', ErrorHandling)
+app.use('*', ErrorHandling);
 
 io.on('connection', async socket => {
     console.log('connection');
-    io.sockets.emit('tableProduct', await productosApi.getProduct())
-    io.sockets.emit("chat", await mensaje.getMessage())
+    io.sockets.emit('tableProduct', await productosApi.getProduct());
+    io.sockets.emit("chat", await mensaje.getMessage());
 
     socket.on("messageFront",async data => {
-        mensaje.addMessage(data)
-        io.sockets.emit("chat",await mensaje.getMessage())
+        await mensaje.addMessage(data);
+        io.sockets.emit("chat",await mensaje.getMessage());
     })
    
 });

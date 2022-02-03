@@ -1,5 +1,5 @@
 const express = require('express');
-const OnlyAdminsPrivilege = require('../../middleware/autorizacion')
+const OnlyAdminsPrivilege = require('../../middleware/autorizacion');
 const{
     listarProductosController,
     listarProductoIdController,

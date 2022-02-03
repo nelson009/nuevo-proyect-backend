@@ -1,7 +1,16 @@
-const { ProductosFs } = require('../models/index')
+// const { ProductosFs } = require('../models/index')
 // const { MemoriaApi } = require('../models/index')
+const { ProductosMDB } = require('../models/index')
 
-const productosApi = new ProductosFs();
+const productosApi = new ProductosMDB('productos', {
+    client : 'mysql',
+    connection: {
+        host: '127.0.0.1',
+        user: 'root',
+        password: '',
+        database: 'basededatoscoder'
+    }
+});
 
 const listarProductosController = async (req, res) => {
     const products = await productosApi.getProduct()
