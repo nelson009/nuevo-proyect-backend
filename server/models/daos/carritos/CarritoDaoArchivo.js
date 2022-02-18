@@ -1,26 +1,31 @@
 const fs = require("fs");
+const ContenedorArchivo = require("../../contenedores/ContenedorArchivo");
 
-class CarritoFs {
+class  CarritoDaoArchivo extends ContenedorArchivo {
     static contadorId = 0;
-    constructor(rutaArchivo){
-        this.nombreArchivo = rutaArchivo;
-        this.idCarrito = ++CarritoFs.contadorId;
+    constructor(){
+        super( "./data/persistenciaFs/carrito.txt" )
+        this.idCarrito = ++CarritoDaoArchivo.contadorId;
+        this.createCarrito()
     }
 
     async createCarrito () {
+        const result = await this.readCarrito()
         try{
-            const carritoCreate  = {
-                id: this.idCarrito,
-                timestamp: Date.now(),
-                productos: []
-            };
-            await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(carritoCreate,null,2))
-
-            return carritoCreate.id
+            if( !result.productos ){
+                const carritoCreate  = {
+                    id: this.idCarrito,
+                    timestamp: Date.now(),
+                    productos: [],
+                };
+                await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(carritoCreate,null,2))
+    
+                return carritoCreate.id
+            }
+            return result.id
         } catch (error) {
             console.log(error)
         }
-    
     }
     
     async readCarrito () {
@@ -49,6 +54,9 @@ class CarritoFs {
     async getProductEnCarrito (id) {
         try {
             const data = await this.readCarrito()
+            if(!data) {
+                await this.createCarrito()
+            }
             if( data.id !== +id ) return { error: `El carrito con id ${id} no existe`};
 
             return data.productos
@@ -60,12 +68,12 @@ class CarritoFs {
     async addProductAcarrito (newProduct) {
         try {
             const data = await this.readCarrito()
-            data.productos.push(newProduct)
+            await data.productos.push(newProduct)
             await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(data,null,2))
 
             return newProduct
         } catch (error) {
-           console.log(error)
+           console.log(error.message)
         }
 
     }
@@ -86,4 +94,4 @@ class CarritoFs {
     }
 }
 
-module.exports = CarritoFs
+module.exports = CarritoDaoArchivo

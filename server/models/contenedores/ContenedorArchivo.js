@@ -1,9 +1,9 @@
 const fs = require('fs');
 const { obtenerIndice, generadorId } = require('../../funcionesUtiles/funciones');
 
-class ProductosFs {
-    constructor(){
-        this.nombreArchivo = "./data/persistenciaFs/productos.txt";
+class ContenedorArchivo {
+    constructor(nombre){
+        this.nombreArchivo = `${nombre}`;
     }
 
     async getProduct () {
@@ -77,4 +77,4 @@ class ProductosFs {
 
 }
 
-module.exports = ProductosFs
+module.exports = ContenedorArchivo

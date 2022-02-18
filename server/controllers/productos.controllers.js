@@ -1,20 +1,9 @@
-// const { ProductosFs } = require('../models/index')
-// const { MemoriaApi } = require('../models/index')
-const { ProductosMDB } = require('../models/index')
-
-const productosApi = new ProductosMDB('productos', {
-    client : 'mysql',
-    connection: {
-        host: '127.0.0.1',
-        user: 'root',
-        password: '',
-        database: 'basededatoscoder'
-    }
-});
+const {productosApi} = require('../models/index');
 
 const listarProductosController = async (req, res) => {
     const products = await productosApi.getProduct()
-    res.render('main', {products})
+    // res.render('main', {products})
+    res.status(200).json(products)
 }
 
 const  listarProductoIdController = async (req, res) => {
@@ -35,7 +24,7 @@ const guardarProductoController = async (req , res) => {
         return  res.status(404).send({error: 'producto no encontrado'})
     }
     await productosApi.addProduct(newProduct)
-
+    // res.json(await productosApi.addProduct(newProduct))
     res.redirect('/')
 }
 

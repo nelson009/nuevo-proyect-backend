@@ -2,10 +2,9 @@ const path = require('path');
 const express = require('express');
 const http = require('http');
 const { engine } = require('express-handlebars');
-// const { memoria } = require('./controllers/productos.controllers');
 const { productosApi } = require('./controllers/productos.controllers')
-// const { Mensaje } = require("./models/index");
 const { MensajeSqlite3 } = require('./models/index');
+const { sqlite3Mensajes } = require('./config/config')
 const rutasApi = require('./router/app.routers');
 const ErrorHandling = require('./middleware/errorHandling')
 
@@ -14,13 +13,7 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 const PORT = process.env.PORT || 8080;
 
-const mensaje = new MensajeSqlite3('mensajes', {
-    client: 'sqlite3',
-    connection: {
-        filename: './DB/ecommerce.sqlite'
-    },
-    useNullAsDefault: true
-});
+const mensaje = new MensajeSqlite3('mensajes', sqlite3Mensajes);
 
 // Middlewares
 app.use(express.static(path.resolve(__dirname, './public')));

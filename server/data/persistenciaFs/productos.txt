@@ -1,22 +1,22 @@
 [
   {
-    "nombre": "coca",
-    "descripcion": "sabor cola",
-    "codigo": "c",
-    "precio": 200,
-    "foto": "https://www.miniboxbar.com/549/mini-botella-vodka-eristoff.jpg",
-    "stock": "10",
+    "nombre": "LG",
+    "descripcion": "tv",
+    "codigo": "1",
+    "precio": "1500",
+    "foto": "https://images.fravega.com/f300/654f64238a932795128e5445ad1f8ed6.jpg.webp",
+    "stock": "2",
     "id": 1,
-    "timestamp": 1643272665161
+    "timestamp": 1645064026245
   },
   {
-    "nombre": "agua",
-    "descripcion": "sabor fresca",
-    "codigo": "a",
-    "precio": 100,
-    "foto": "https://www.miniboxbar.com/549/mini-botella-vodka-eristoff.jpg",
-    "stock": "5",
+    "nombre": "SONY",
+    "precio": "3000",
+    "foto": "https://images.fravega.com/f300/654f64238a932795128e5445ad1f8ed6.jpg.webp",
+    "descripcion": "TV",
+    "stock": "23",
+    "codigo": "12",
     "id": 2,
-    "timestamp": 1643647623411
+    "timestamp": 1645148190786
   }
 ]

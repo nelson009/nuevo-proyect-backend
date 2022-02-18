@@ -1,8 +1,5 @@
-// const { Carrito } = require('../models/index')
-const { CarritoFs } = require('../models/index')
-const { productosApi } = require('./productos.controllers') 
-
-const carrito = new CarritoFs("./data/persistenciaFs/carrito.txt")
+const {productosApi} = require('../models/index')
+const {carrito} = require('../models/index');
 
 const  crearCarrito = async (req, res) => {
 
@@ -40,7 +37,8 @@ const eliminarProductoPorIDEnCarrito = async (req,res) => {
     const productoEnCarritoEliminado = await carrito.deleteProductDeCarrito( id,id_prod );
     if( productoEnCarritoEliminado  ) return res.status(404).send( productoEnCarritoEliminado.error );
 
-    return res.json( productoEnCarritoEliminado );
+    res.json( productoEnCarritoEliminado );
+  
 }
 
 module.exports = {

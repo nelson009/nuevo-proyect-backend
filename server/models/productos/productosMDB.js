@@ -39,6 +39,8 @@ class ProductosMDB {
         try {
             await this.knex(this.tableName).insert(product);
             console.log('producto insertado exitosamente')
+
+            return product
         }
         catch (error) {
             console.log(error.message);
@@ -55,6 +57,8 @@ class ProductosMDB {
             .update('foto', productoNuevo.foto)
             .update('stock', productoNuevo.stock)
             console.log('El producto se actualizo exitosamente')
+
+            return productoNuevo
         } 
         catch (error) {
             console.log(error.message);
