@@ -38,7 +38,6 @@ fetch(`http://localhost:8080/api/productos/${i}`, {
 .then(data => {
     console.log('UPDATE',data)
  
-
     document.getElementById('nombre').value = data.nombre 
     document.getElementById('precio').value = data.precio 
     document.getElementById('foto').value = data.foto 

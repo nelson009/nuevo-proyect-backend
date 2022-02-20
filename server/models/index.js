@@ -23,6 +23,7 @@ switch(process.env.DATASOURCE) {
     
         productosApi = new ProdutcDaoMongoDB ();
         carrito = new CarritoDaoMongoDB();
+        break;
     default:
         const ProdutcDaoArchivo = require('./daos/productos/ProductsDaoArchivo');
         const CarritoDaoArchivo = require('./daos/carritos/CarritoDaoArchivo');

@@ -7,7 +7,7 @@ fetch('http://localhost:8080/api/productos?',{
 }})
 .then(res => res.json())
 .catch(error => console.error('Error:', error))
-.then(data => {   
+.then(data => {
 const renderProduct = Handlebars.compile(
     `
     <h1 class="silver animate__animated animate__zoomIn container mt-3">Vista de Productos</h1>
@@ -19,9 +19,9 @@ const renderProduct = Handlebars.compile(
             <p class = "nombre-producto">codigo: {{codigo}}</p>
             <p class = "nombre-producto">stock: {{stock}}</p>
             <P class = "tamañoLetra">precio: {{precio}}</P>
-            <button type="button" class="btn btn-danger" onclick= 'deleteProduct({{id}})'>Eliminar</button>
+            <button type="button" class="btn btn-danger" onclick= "deleteProduct('{{id}}')">Eliminar</button>
             <a href="http://localhost:8080/updateProduct.html?id={{id}}" class="btn btn-primary">Editar</a>
-            <button type="button" class="btn btn-success " onclick= 'addCart({{id}})'>Agregar al Carrito</button>
+            <button type="button" class="btn btn-success " onclick= "addCart('{{id}}')">Agregar al Carrito</button>
             </div>
         {{/each}}
     {{else}}
@@ -50,6 +50,7 @@ const deleteProduct = (id) => {
 }
 
 const addCart = (id) => {
+    console.log('estees el tipo de id:',typeof(id) ,+id)
     fetch(`http://localhost:8080/api/carrito/${id}/productos`, {
         method: 'POST',
         headers: {

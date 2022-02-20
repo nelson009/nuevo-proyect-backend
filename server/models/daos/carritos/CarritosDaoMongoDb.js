@@ -21,13 +21,16 @@ const carritoSchema = new Schema({
 class CarritosDaoMongoDb extends ContenedorMongoDB {
     constructor() {
         super(collection, carritoSchema)
+        this.createCarrito()
     }
 
     async createCarrito () {
         try {
             const result = await this.model.find()
-            if(!result.length < 0){
-                await Carrito.create(
+            console.log('LENGHT',result.length)
+           
+            if(result.length === 0){
+                await this.model.create(
                     {
                         timestamp: Date.now(),
                         productos: [],
@@ -35,7 +38,9 @@ class CarritosDaoMongoDb extends ContenedorMongoDB {
                 )
                 console.log('Carrito Creado');
             }
-            return result[0]._id
+            const result2 = await this.model.find()
+            
+            return result2[0]._id
            
         }
         catch (error) {
@@ -46,7 +51,8 @@ class CarritosDaoMongoDb extends ContenedorMongoDB {
     async deleteCarrito (idCarrito) {
         try {
             const result = await this.model.find()
-            if(result[0]._id !== idCarrito) return { error: `El carrito con id ${idCarrito} no existe`}
+            console.log('DELETE CARRITO', result)
+            if(result[0]._id.toString() !== idCarrito) return { error: `El carrito con id ${idCarrito} no existe`}
             await this.model.deleteOne( {_id: idCarrito} );
 
             return "carito vaciado exitosamente"
@@ -59,9 +65,19 @@ class CarritosDaoMongoDb extends ContenedorMongoDB {
     async getProductEnCarrito (id) {
         try {
             const result = await this.model.find()
-            if( result[0]._id != id ) return { error: `El carrito con id ${id} no existe`};
+            if( result[0]._id.toString() !== id ) return { error: `El carrito con id ${id} no existe`};
             console.log('CARRITO GET',result[0].productos)
-            return result[0].productos
+            const newObj = result[0].productos.map(ele => ({
+                id: ele._id,
+                nombre: ele.nombre,
+                precio: ele.precio,
+                foto: ele.foto,
+                codigo: ele.codigo,
+                stock: ele.stock,
+                descripcion: ele.descripcion 
+             }))
+
+            return newObj
         }
         catch (error) {
             console.log(error);
@@ -85,6 +101,7 @@ class CarritosDaoMongoDb extends ContenedorMongoDB {
                 }}}
             );
             console.log('PRODUCTO AGREGADO AL CARRITO');
+
             return newProduct;
         }
         catch (error) {
@@ -95,8 +112,10 @@ class CarritosDaoMongoDb extends ContenedorMongoDB {
     async deleteProductDeCarrito (idCart,idProduct) {
         try {
             const result = await this.model.find()
+            const findProduct = result[0].productos.find(ele => ele.id === idProduct)
          
-            if( result[0]._id != idCart ) return { error: `El carrito con id ${idCart} no existe`};
+            if( result[0]._id.toString() !== idCart ) return { error: `El carrito con id ${idCart} no existe`};
+            if (findProduct === undefined) return { error: `El producto con id ${idProduct} no existe` }
             
             const delet = await this.model.updateOne(
                 { timestamp: result[0].timestamp },

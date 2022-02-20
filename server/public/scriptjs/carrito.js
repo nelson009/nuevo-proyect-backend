@@ -32,7 +32,7 @@ const renderProduct = Handlebars.compile(
                 <p class="name-1">{{nombre}}</p>
                 <p class="tamaño-letra">{{codigo}}</p>
                 <p class="tamaño-letra">{{precio}}</p>
-                <img class="image-cancel" src='../imagen/eliminar.png' alt='cart' height='30px' width='30px' onclick= 'deleteProduct({{id}})'/>
+                <img class="image-cancel" src='../imagen/eliminar.png' alt='cart' height='30px' width='30px' onclick= "deleteProduct('{{id}}')"/>
             </div>
         {{/each}}
     {{else}}
@@ -50,8 +50,6 @@ document.getElementById('cartProduc').innerHTML = html;
 
 });
 })
-
-
 
 const deleteProduct = (idProduct) => {
     fetch(`http://localhost:8080/api/carrito/${idCart}/productos/${idProduct}`,{

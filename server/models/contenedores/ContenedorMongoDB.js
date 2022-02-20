@@ -1,23 +1,27 @@
 const mongoose = require('mongoose');
 const {mongodb} = require('../../config/config')
 
-// await mongoose.connect(mongodb.uri)
+mongoose.connect(mongodb.uri)
+console.log('Base de datos Mongo Conectado Productos');
 class ContenedorMongoDb {
     constructor(collection, Schema) {
         this.model = mongoose.model(collection, Schema);
-        this.mongoConect()
     }
     
-    async mongoConect () {
-        await mongoose.connect(mongodb.uri)
-        console.log('Base de datos Mongo Conectado Productos');
-    }
-
     async getProduct () {
         try {
             const result = await this.model.find();
+            const NewObj = result.map(ele => ({
+               id: ele._id,
+               nombre: ele.nombre,
+               precio: ele.precio,
+               foto: ele.foto,
+               codigo: ele.codigo,
+               stock: ele.stock,
+               descripcion: ele.descripcion 
+            }))
 
-            return result;
+            return NewObj;
         }
         catch (error) {
             console.log(error.message);
@@ -27,7 +31,6 @@ class ContenedorMongoDb {
     async getProductId (id) {
         try {
             const document = await this.model.findById( id );
-            console.log('Producto encontrado por Id', document);
 
             if( document.length === 0 ) {
 
@@ -52,7 +55,7 @@ class ContenedorMongoDb {
 
     async updateProduct (producto,id) {
         try{
-            await this.model.updateOne(
+            const update = await this.model.updateOne(
                 { _id: id },
                 { $set: {
                     nombre: producto.nombre,
@@ -64,6 +67,8 @@ class ContenedorMongoDb {
                 }}
             );
             console.log('Producto actualizado Exitosamente!')
+
+            return update;
         }
         catch (error) {
             console.log(error.message);

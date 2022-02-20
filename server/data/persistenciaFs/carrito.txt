@@ -3,26 +3,14 @@
   "timestamp": 1644900822508,
   "productos": [
     {
-      "id": 5,
       "nombre": "SAMSUNG",
-      "precio": 5000,
+      "precio": "20000",
       "foto": "https://images.fravega.com/f300/654f64238a932795128e5445ad1f8ed6.jpg.webp",
-      "stock": 30,
-      "codigo": 40,
-      "timestamp": "2022-02-15T00:42:58.000Z",
       "descripcion": "TV",
-      "submit": null
-    },
-    {
-      "id": 27,
-      "nombre": "PHILIPS",
-      "precio": 7000,
-      "foto": "https://images.fravega.com/f300/654f64238a932795128e5445ad1f8ed6.jpg.webp",
-      "stock": 76,
-      "codigo": 67,
-      "timestamp": "2022-02-15T04:29:40.000Z",
-      "descripcion": "TV",
-      "submit": null
+      "stock": "1",
+      "codigo": "2",
+      "id": 1,
+      "timestamp": 1645348717903
     }
   ]
 }
