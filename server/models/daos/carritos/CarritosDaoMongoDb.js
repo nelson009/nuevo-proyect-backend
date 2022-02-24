@@ -27,7 +27,6 @@ class CarritosDaoMongoDb extends ContenedorMongoDB {
     async createCarrito () {
         try {
             const result = await this.model.find()
-            console.log('LENGHT',result.length)
            
             if(result.length === 0){
                 await this.model.create(

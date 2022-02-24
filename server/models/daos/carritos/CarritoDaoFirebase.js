@@ -88,8 +88,10 @@ class CarritoDaoFirebase extends ContenedorFirebase {
         try {
             const carrito = await this.leerCarrito()
             const findProduct = carrito[0].productos.find(ele => ele.id === idProduct)
+
             if (carrito[0].id !== idCart) return { error: `El carrito con id ${idCart} no existe` }
             if (findProduct === undefined) return { error: `El producto con id ${idProduct} no existe` }
+            
             await this.collection.doc(carrito[0].id).update(
                 "productos", FieldValue.arrayRemove(findProduct),{merge:true}
             )

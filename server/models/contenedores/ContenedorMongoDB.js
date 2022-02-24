@@ -3,6 +3,7 @@ const {mongodb} = require('../../config/config')
 
 mongoose.connect(mongodb.uri)
 console.log('Base de datos Mongo Conectado Productos');
+
 class ContenedorMongoDb {
     constructor(collection, Schema) {
         this.model = mongoose.model(collection, Schema);
@@ -36,6 +37,7 @@ class ContenedorMongoDb {
 
                 return undefined;
             }
+            
             return document;
         }
         catch (error) {

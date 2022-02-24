@@ -3,8 +3,7 @@ const express = require('express');
 const http = require('http');
 const { engine } = require('express-handlebars');
 const { productosApi } = require('./controllers/productos.controllers')
-const { MensajeSqlite3 } = require('./models/index');
-const { sqlite3Mensajes } = require('./config/config')
+const { MensajesMongoDb } = require('./models/index');
 const rutasApi = require('./router/app.routers');
 const ErrorHandling = require('./middleware/errorHandling')
 
@@ -13,7 +12,7 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 const PORT = process.env.PORT || 8080;
 
-const mensaje = new MensajeSqlite3('mensajes', sqlite3Mensajes);
+const mensaje = new MensajesMongoDb();
 
 // Middlewares
 app.use(express.static(path.resolve(__dirname, './public')));
@@ -39,6 +38,7 @@ io.on('connection', async socket => {
     io.sockets.emit("chat", await mensaje.getMessage());
 
     socket.on("messageFront",async data => {
+        data.fecha = new Date().toLocaleString("es-AR", "DD-M-YYYY HH:MM:SS")
         await mensaje.addMessage(data);
         io.sockets.emit("chat",await mensaje.getMessage());
     })
