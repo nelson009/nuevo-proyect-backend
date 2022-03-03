@@ -51,7 +51,8 @@ nav a img {
   color: #ffffff;
   font-family: "Oswald", sans-serif;
   text-align: center;
-  background-color: #4a235a;
+  /* background-color: #4a235a; */
+  background: linear-gradient(to right, #212529 5%, #6610f2 80%, #212529);
   font-size: 25px;
 }
 .sub-titulo {
@@ -124,7 +125,8 @@ form fieldset {
   background-color: black;
 }
 .message-fondo {
-  background-color: Turquoise;
+  /* background-color: Turquoise; */
+  background: linear-gradient(to right, black 15%, purple 70%, black);
 }
 
 .footerAjustar {

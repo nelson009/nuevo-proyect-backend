@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const {mongodb} = require('../../config/config')
+
 const { normalize, schema } = require('normalizr');
 
 const Schema = mongoose.Schema;
@@ -17,6 +19,8 @@ const mensajesSchema = new Schema({
     texto:{type: String,require: true,},
 });
 
+mongoose.connect(mongodb.uri);
+
 class MensajesMongoDb  {
     constructor() {
         this.model = mongoose.model(collection, mensajesSchema);
@@ -25,13 +29,13 @@ class MensajesMongoDb  {
     async getMessage () {
         try {
             const result = await this.model.find({},{__v:0});
-            const stringMessages = JSON.stringify( result )
-            const messagesParce = JSON.parse(stringMessages)
+            const stringMessages = JSON.stringify( result );
+            const messagesParce = JSON.parse(stringMessages);
 
             const mensaje = {
                 id: 'mensajes',
                 messages: messagesParce
-            }
+            };
 
             const authorSchema = new schema.Entity('author',{},{idAttribute: 'email'});
 

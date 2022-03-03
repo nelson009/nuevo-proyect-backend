@@ -1,0 +1,12 @@
+
+    <section class="jumbotron container">
+        {{#if nombre}}
+        <div class= "alert alert-primary">
+            <h2> Hasta luego {{nombre}}</h2>
+        </div>
+        {{/if}}
+    </section>
+    <script>setTimeout(() => {
+        location.href = "http://localhost:8080/login";
+        },1000*2)
+    </script>
