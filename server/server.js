@@ -4,6 +4,7 @@ const http = require('http');
 const { engine } = require('express-handlebars');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const passport = require('./middleware/passport');
 
 const { mongodb } = require('./config/config');
 const { MensajesMongoDb } = require('./models/index');
@@ -24,6 +25,21 @@ const mensaje = new MensajesMongoDb();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, './public')));
+// configuro session mongo atlas
+app.use(session({
+    name: 'my-session',
+    store: MongoStore.create({ mongoUrl: mongodb.uri
+    }),
+    secret: 'my-secreto',
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        maxAge: 600000
+    }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Template Engine
 app.engine('handlebars', engine({
@@ -34,21 +50,6 @@ app.engine('handlebars', engine({
 }))
 app.set('view engine', 'handlebars');
 app.set('views', './views');
-
-// configuro session mongo atlas
-app.use(session({
-    name: 'my-session',
-    store: MongoStore.create({ mongoUrl: mongodb.uri ,
-    ttl: 600,
-    }),
-    secret: 'my-secreto',
-    resave: false,
-    saveUninitialized: false,
-    rolling: true,
-    cookie: {
-        maxAge: 600000
-    }
-}));
 
 //Rutas
 

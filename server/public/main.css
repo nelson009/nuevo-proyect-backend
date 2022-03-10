@@ -122,7 +122,8 @@ form fieldset {
 }
 
 .formulario {
-  background-color: black;
+  /* background-color: black; */
+  background-image: url(https://static.vecteezy.com/system/resources/previews/002/124/711/original/abstract-modern-blue-stripes-or-rectangle-layer-overlapping-with-shadow-on-dark-blue-background-vector.jpg);
 }
 .message-fondo {
   /* background-color: Turquoise; */
@@ -140,6 +141,10 @@ form fieldset {
 }
 .text-color {
   color: brown;
+}
+
+.error-login {
+  color: #990c23;
 }
 
 /* media query */

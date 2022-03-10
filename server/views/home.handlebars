@@ -1,12 +1,9 @@
 
 {{> menuProductos}}
     <section class="container bordeBlanco mt-3">
-    {{#if usuario.nombre}}
+    {{#if usuario}}
         
-        <h1 class="alert alert-success">Bienvenido {{usuario.nombre}}
-        {{!-- <form action="/logout" method="get" class="col-sm-6 d-flex justify-content-end">
-            <input type="submit" value='Deslogear' class="btn btn-warning">
-        </form>    --}}
+        <h1 class="alert alert-success">Bienvenido {{usuario}}, {{email}}
             <button class="btn btn-warning float-right mt-2" onclick="location.href='/logout'">
             Desloguear
             </button>
