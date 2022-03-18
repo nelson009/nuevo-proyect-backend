@@ -66,6 +66,17 @@ nav a img {
   font-size: 25px;
 }
 
+.info {
+  margin-top: 50px;
+  padding: 35px;
+  height: 400px;
+  color: white;
+  background-color: black;
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+  font-size: 25px;
+}
+
 /*Pie de pagina */
 h4 {
   color: white;

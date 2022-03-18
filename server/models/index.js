@@ -1,8 +1,9 @@
+const {DATASOURCE} = require('../config/config')
 
 let productosApi;
 let carrito;
 
-switch(process.env.DATASOURCE) {
+switch(DATASOURCE) {
     case 'memoria':
         const ProductDaoMemoria =  require('./daos/productos/ProductsDaoMemoria');
         const CarritoDaoMemoria =  require('./daos/carritos/CarritoDaoMemoria');

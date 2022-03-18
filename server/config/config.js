@@ -1,6 +1,12 @@
-
+require('dotenv').config();
+const yargs = require('yargs');
 const admin = require('firebase-admin');
 const  serviceAccount = require('../DB/coder.json')
+
+const {
+    DATASOURCE,
+    SESSION_SECRET
+} = process.env;
 
 module.exports = {
     mongodb: {
@@ -15,5 +21,8 @@ module.exports = {
         filename: './DB/ecommerce.sqlite'
         },
         useNullAsDefault: true
-    }
+    },
+    DATASOURCE,
+    SESSION_SECRET,
+    args :  yargs(process.argv.splice(2)).default({port: 8080}).argv
 }

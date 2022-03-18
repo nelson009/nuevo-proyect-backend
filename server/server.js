@@ -5,8 +5,10 @@ const { engine } = require('express-handlebars');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('./middleware/passport');
+const info = require('./router/info/info.router')
+const randomNumber = require('./router/randomNumber/process.router')
 
-const { mongodb } = require('./config/config');
+const { mongodb , SESSION_SECRET, args} = require('./config/config');
 const { MensajesMongoDb } = require('./models/index');
 const { productosApi } = require('./controllers/productos.controllers');
 
@@ -17,10 +19,9 @@ const ErrorHandling = require('./middleware/errorHandling');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
-const PORT = process.env.PORT || 8080;
+const PORT = args.port
 
 const mensaje = new MensajesMongoDb();
-
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +31,7 @@ app.use(session({
     name: 'my-session',
     store: MongoStore.create({ mongoUrl: mongodb.uri
     }),
-    secret: 'my-secreto',
+    secret: `${SESSION_SECRET}`,
     resave: false,
     saveUninitialized: false,
     rolling: true,
@@ -52,7 +53,8 @@ app.set('view engine', 'handlebars');
 app.set('views', './views');
 
 //Rutas
-
+app.use('/info', info);
+app.use('/api', randomNumber);
 app.use('/api', rutasApi);
 app.use(loginAuth);
 app.use('*', ErrorHandling);
