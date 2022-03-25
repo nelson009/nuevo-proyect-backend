@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
-    "start-dev": "nodemon -r dotenv/config"
+    "start-dev": "nodemon -r dotenv/config",
+    "foreverF": "forever start -w server.js -s FORK",
+    "foreverC": "forever start -w server.js -s CLUSTER",
+    "pm2-f": "pm2 start server.js --name=server-1 --watch -- 8080",
+    "pm2-c": "pm2 start server.js --name=server --watch -i max"
   },
   "keywords": [],
   "author": "",
