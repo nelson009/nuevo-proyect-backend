@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const yargs = require("yargs")(process.argv.splice(2));
+// const yargs = require("yargs")(process.argv.splice(2));
 const admin = require("firebase-admin");
 const serviceAccount = require("../DB/coder.json");
 
@@ -22,6 +22,6 @@ module.exports = {
   },
   DATASOURCE,
   SESSION_SECRET,
-  args: yargs.default({ port: 8080, server: "FORK" }).alias({ s: "server" })
-    .argv,
+  // args: yargs.default({ port: 8080, server: "FORK" }).alias({ s: "server" })
+  //   .argv,
 };

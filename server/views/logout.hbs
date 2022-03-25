@@ -1,4 +1,5 @@
 
+{{>headInfo title="Logout"}}
     <section class="jumbotron container">
         {{#if firstName}}
         <div class= "alert alert-primary">
@@ -7,6 +8,7 @@
         {{/if}}
     </section>
     <script>setTimeout(() => {
-        location.href = "http://localhost:8080/login";
+        location.href = "http://localhost:80/login";
         },1000*2)
     </script>
+{{> footer}}

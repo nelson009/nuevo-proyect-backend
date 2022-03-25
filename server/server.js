@@ -1,7 +1,7 @@
 const path = require("path");
 const express = require("express");
 const http = require("http");
-const { engine } = require("express-handlebars");
+const hbs = require("hbs");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("./middleware/passport");
@@ -9,7 +9,8 @@ const info = require("./router/info/info.router");
 const randomNumber = require("./router/randomNumber/process.router");
 const cluster = require("cluster");
 
-const { mongodb, SESSION_SECRET, args } = require("./config/config");
+// const { mongodb, SESSION_SECRET, args } = require("./config/config");
+const { mongodb, SESSION_SECRET } = require("./config/config");
 const { MensajesMongoDb } = require("./models/index");
 const { productosApi } = require("./controllers/productos.controllers");
 
@@ -23,7 +24,8 @@ const io = require("socket.io")(server);
 // const PORT = args.port
 
 const mensaje = new MensajesMongoDb();
-const modoCluster = args.server === "CLUSTER";
+// const modoCluster = args.server === "CLUSTER";
+const modoCluster = process.argv[3] === "CLUSTER";
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -46,17 +48,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Template Engine
-app.engine(
-  "handlebars",
-  engine({
-    extname: "hbs",
-    defaultLayout: "index.hbs",
-    layoutsDir: path.resolve(__dirname, "./views/layouts"),
-    partialsDir: path.resolve(__dirname, "./views/partials"),
-  })
-);
-app.set("view engine", "handlebars");
-app.set("views", "./views");
+hbs.registerPartials(__dirname + "/views/partials", function (err) {});
+app.set("view engine", "hbs");
+app.set("views", __dirname + "/views");
 
 //Rutas
 app.use("/info", info);
@@ -78,6 +72,7 @@ io.on("connection", async (socket) => {
 });
 
 if (modoCluster && cluster.isPrimary) {
+  // console.log("PORTCLUST", args.port);
   const os = require("os");
 
   console.log(`I am the primary process! PID =>`, process.pid);
@@ -102,7 +97,8 @@ if (modoCluster && cluster.isPrimary) {
     );
   });
 } else {
-  const PORT = args.port;
+  // const PORT = args.port;
+  const PORT = process.argv[2] || 8080;
   const connectedServer = server.listen(PORT, () => {
     console.log(
       "[",

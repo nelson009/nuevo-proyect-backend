@@ -7,10 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
     "start-dev": "nodemon -r dotenv/config",
-    "foreverF": "forever start -w server.js -s FORK",
-    "foreverC": "forever start -w server.js -s CLUSTER",
-    "pm2-f": "pm2 start server.js --name=server-1 --watch -- 8080",
-    "pm2-c": "pm2 start server.js --name=server --watch -i max"
+    "foreverF": "forever start -w server.js 8080 FORK",
+    "foreverC": "forever start -w server.js 8080 CLUSTER",
+    "pm2-f": "pm2 start server.js --name=server-1 --watch -- 8080 FORK",
+    "pm2-c": "pm2 start server.js --name=server --watch -i max -- 8080 FORK",
+    "cluster-nativo": "pm2 start server.js --name=clusterNat --watch -- 8081 CLUSTER",
+    "infoRut": "pm2 start server.js --name=rutas --watch -- 8080 FORK",
+    "pm2-random1": "pm2 start server.js --name=server1 --watch -- 8082",
+    "pm2-random2": "pm2 start server.js --name=server2 --watch -- 8083",
+    "pm2-random3": "pm2 start server.js --name=serve3 --watch -- 8084",
+    "pm2-random4": "pm2 start server.js --name=serve4 --watch -- 8085"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +29,7 @@
     "express-session": "^1.17.2",
     "faker": "^5.4.0",
     "firebase-admin": "^10.0.2",
+    "hbs": "^4.2.0",
     "knex": "^0.95.11",
     "mongoose": "^6.2.1",
     "mysql": "^2.18.1",
@@ -31,7 +38,7 @@
     "passport-local": "^1.0.0",
     "socket.io": "^4.4.1",
     "sqlite3": "^5.0.2",
-    "yars": "^1.2.0"
+    "yargs": "^17.4.0"
   },
   "devDependencies": {
     "dotenv": "^16.0.0"

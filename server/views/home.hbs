@@ -1,4 +1,5 @@
 
+{{>headHome title="Formulario y chat"}}
 {{> menuProductos}}
     <section class="container bordeBlanco mt-3">
     {{#if usuario}}
@@ -41,7 +42,7 @@
 
     <section class="bordeBlanco container">
         <h2 id="compresion" class="silver container animate__animated animate__zoomIn mt-4"></h1>
-        <div id = 'messagesId' class="message-fondo mt-3"></div>
+        <div id = "messagesId" class="message-fondo mt-3"></div>
         <form onsubmit="return addMessage()" class=" mb-4">
                 <input type="email" id ="email" placeholder="ejemplo@gmail.com..." class="form-control" >
                 <input type= "texto" id = "messageNombre" placeholder="escribe tu nombre..." class="form-control">
@@ -53,3 +54,4 @@
                 <input type="submit"  value="Enviar " class="btn btn-primary mt-2" >
         </form>
     </section>
+{{> footer}}

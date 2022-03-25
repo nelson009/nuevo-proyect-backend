@@ -1,15 +1,14 @@
-
-
-fetch('http://localhost:8080/api/productos?',{
-    method: 'GET', 
-    headers:{
-        'Content-Type': 'application/json'
-}})
-.then(res => res.json())
-.catch(error => console.error('Error:', error))
-.then(data => {
-const renderProduct = Handlebars.compile(
-    `
+fetch("http://localhost:8080/api/productos?", {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
+  .then((res) => res.json())
+  .catch((error) => console.error("Error:", error))
+  .then((data) => {
+    const renderProduct = Handlebars.compile(
+      `
     <h1 class="silver animate__animated animate__zoomIn container mt-3">Vista de Productos</h1>
     {{#if products}}
         {{#each products}}
@@ -32,31 +31,31 @@ const renderProduct = Handlebars.compile(
     </div>
     {{/if}}
     `
-);
-console.log('desde el back',data)
-const html = renderProduct({products:data});
-document.getElementById('listaProductos').innerHTML = html
- })
+    );
+    console.log("desde el back", data);
+    const html = renderProduct({ products: data });
+    document.getElementById("listaProductos").innerHTML = html;
+  });
 
 const deleteProduct = (id) => {
-    fetch(`http://localhost:8080/api/productos/${id}?admin=true`,{
-        method: 'DELETE',
-    })
-    .then(res => res.json())
+  fetch(`http://localhost:8080/api/productos/${id}?admin=true`, {
+    method: "DELETE",
+  })
+    .then((res) => res.json())
     .then(() => {
-        window.location.href = 'http://localhost:8080/listadeproductos.html'
+      window.location.href = "http://localhost:8080/listadeproductos.html";
     })
-    .catch( error => console.error(error))
-}
+    .catch((error) => console.error(error));
+};
 
 const addCart = (id) => {
-    console.log('estees el tipo de id:',typeof(id) ,+id)
-    fetch(`http://localhost:8080/api/carrito/${id}/productos`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-    })
-    .then(res => res.json())
-    .then(res => console.log('POST CART', res))
-}
+  console.log("estees el tipo de id:", typeof id, +id);
+  fetch(`http://localhost:8080/api/carrito/${id}/productos`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((res) => console.log("POST CART", res));
+};

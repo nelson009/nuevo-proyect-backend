@@ -1,0 +1,146 @@
+---FOREVER COMANDOS Y RESULTADOS
+				<=========== modo fork ===========>
+PS G:\proyectos\procect_nvo_backend\server\server> forever start -w server.js 8080 FORK
+
+				<===========forever list ===========>
+PS G:\proyectos\procect_nvo_backend\server\server> forever list
+(node:2212) Warning: Accessing non-existent property 'padLevels' of module exports inside circular dependency
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:2212) Warning: Accessing non-existent property 'padLevels' of module exports inside circular dependency
+info:    Forever processes running
+data:        uid  command                     script                                                           forever pid   id logfile                           uptime
+data:    [0] xav1 "D:\node react js\node.exe" G:\proyectos\procect_nvo_backend\server\server\server.js -s FORK 17164   15644    C:\Users\BOND09\.forever\xav1.log 0:0:1:34.004999999999995
+PS G:\proyectos\procect_nvo_backend\server\server> 
+
+				<=========== modo cluster ==============>
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 start server.js --name=server --watch -i max -- 8080 FORK
+
+				<=========== forever stopall ==============>
+PS G:\proyectos\procect_nvo_backend\server\server> forever stopall 
+(node:3520) Warning: Accessing non-existent property 'padLevels' of module exports inside circular dependency
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3520) Warning: Accessing non-existent property 'padLevels' of module exports inside circular dependency
+info:    Forever stopped processes:
+data:        uid  command                     script                                                              forever pid  id logfile                           uptime
+data:    [0] 8P-3 "D:\node react js\node.exe" G:\proyectos\procect_nvo_backend\server\server\server.js -s CLUSTER 9212    5580    C:\Users\BOND09\.forever\8P-3.log 0:0:4:20.732000000000028
+PS G:\proyectos\procect_nvo_backend\server\server> 
+
+
+---pm2 COMANDOS Y RESULTADOS
+				<=========== pm2 modo fork ==============>
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 start server.js --name=server-1 --watch -- 8080 FORK
+
+[PM2] Starting G:\proyectos\procect_nvo_backend\server\server\server.js in fork_mode (1 instance)
+[PM2] Done.
+┌─────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id  │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├─────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0   │ server-1    │ default     │ 1.0.0   │ fork    │ 1200     │ 0s     │ 0    │ online    │ 0%       │ 43.6mb   │ BOND09   │ enabled  │
+└─────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+PS G:\proyectos\procect_nvo_backend\server\server>
+
+				/////////////pm2 list ///////////////
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 list      
+┌─────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id  │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├─────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0   │ server-1    │ default     │ 1.0.0   │ fork    │ 1200     │ 3m     │ 0    │ online    │ 0%       │ 73.6mb   │ BOND09   │ enabled  │
+└─────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+PS G:\proyectos\procect_nvo_backend\server\server> 
+
+				///////////////////pm2 stop //////////////////
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 stop all  
+[PM2] Applying action stopProcessId on app [all](ids: [ 0 ])
+[PM2] [server-1](0) ✓
+┌─────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id  │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├─────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0   │ server-1    │ default     │ 1.0.0   │ fork    │ 0        │ 0      │ 0    │ stopped   │ 0%       │ 0b       │ BOND09   │ disabled │
+└─────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+PS G:\proyectos\procect_nvo_backend\server\server> 
+
+				/////////////////pm2 start //////////////////
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 start 0
+[PM2] Applying action restartProcessId on app [0](ids: [ '0' ])
+[PM2] [server-1](0) ✓
+[PM2] Process successfully started
+┌─────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id  │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├─────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0   │ server-1    │ default     │ 1.0.0   │ fork    │ 15100    │ 0s     │ 0    │ online    │ 0%       │ 45.9mb   │ BOND09   │ disabled │
+└─────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+PS G:\proyectos\procect_nvo_backend\server\server> 
+
+				////////////pm2 delete ///////////
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 stop all
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [server-1](0) ✓
+┌─────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id  │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└─────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+PS G:\proyectos\procect_nvo_backend\server\server>
+
+					/////////////////pm2 modo cluster ///////////
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 start server.js --name=server --watch -i max -- 8080 FORK
+
+[PM2] Starting G:\proyectos\procect_nvo_backend\server\server\server.js in cluster_mode (0 instance)
+[PM2] Done.
+┌─────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id  │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├─────┼───────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0   │ server    │ default     │ 1.0.0   │ cluster │ 17852    │ 3s     │ 0    │ online    │ 35.9%    │ 91.1mb   │ BOND09   │ enabled  │
+│ 1   │ server    │ default     │ 1.0.0   │ cluster │ 18112    │ 3s     │ 0    │ online    │ 48.4%    │ 86.9mb   │ BOND09   │ enabled  │
+│ 2   │ server    │ default     │ 1.0.0   │ cluster │ 11752    │ 2s     │ 0    │ online    │ 54.6%    │ 79.7mb   │ BOND09   │ enabled  │
+│ 3   │ server    │ default     │ 1.0.0   │ cluster │ 17620    │ 2s     │ 0    │ online    │ 40.6%    │ 65.9mb   │ BOND09   │ enabled  │
+└─────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+
+				//////////////pm2 logs ///////////////
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 logs      
+
+				////////// pm2 monit ////////////////
+
+				////////////////pm2 reload <name> /////////////////
+PS G:\proyectos\procect_nvo_backend\server\server> pm2 reload server
+Use --update-env to update environment variables
+[PM2] Applying action reloadProcessId on app [server](ids: [ 0, 1, 2, 3 ])
+[PM2] [server](1) ✓
+[PM2] [server](0) ✓
+[PM2] [server](2) ✓
+[PM2] [server](3) ✓
+PS G:\proyectos\procect_nvo_backend\server\server>
+
+			///////////// listar los procesos activos de node.js////////////
+PS G:\proyectos\procect_nvo_backend\server> TASKLIST /FI "imagename eq node.exe"
+
+Nombre de imagen               PID Nombre de sesión Núm. de ses Uso de memor
+========================= ======== ================ =========== ============
+node.exe                      2744 Console                    1    39,484 KB
+node.exe                      8852 Console                    1    48,692 KB
+node.exe                      3704 Console                    1    76,648 KB
+node.exe                      6868 Console                    1    75,768 KB
+node.exe                      1152 Console                    1    76,252 KB
+node.exe                     10584 Console                    1    75,408 KB
+PS G:\proyectos\procect_nvo_backend\server>
+
+1)para levantar esta consigna 
+Configurar Nginx para balancear cargas de nuestro servidor de la siguiente manera:
+Redirigir todas las consultas a /api/randoms a un cluster de servidores escuchando en el puerto 8081. El cluster será creado desde node utilizando el módulo nativo cluster.
+El resto de las consultas, redirigirlas a un servidor individual escuchando en el puerto 8080.
+
+se uso comandos:pm2 start server.js --name=clusterNat --watch -- 8081 CLUSTER
+		pm2 start server.js --name=rutas --watch -- 8080 FORK
+
+
+2)Luego, modificar la configuración para que todas las consultas a /api/randoms sean redirigidas a un cluster de servidores gestionado desde nginx,
+ repartiéndolas equitativamente entre 4 instancias escuchando en los puertos 8082, 8083, 8084 y 8085 respectivamente.
+
+se uso comandos:pm2 start server.js --name=rutas --watch -- 8080 FORK
+		pm2 start server.js --name=server1 --watch -- 8082",
+    		pm2 start server.js --name=server2 --watch -- 8083,
+    		pm2 start server.js --name=serve3 --watch -- 8084,
+    		pm2 start server.js --name=serve4 --watch -- 8085
+
+					
+
+
