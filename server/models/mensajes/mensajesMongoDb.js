@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const {mongodb} = require('../../config/config')
+const { mongodb } = require('../../config/config')
+const logger = require("../../logger/loggerConfig");
 
 const { normalize, schema } = require('normalizr');
 
@@ -8,28 +9,28 @@ const collection = 'mensajes';
 
 const mensajesSchema = new Schema({
     author: {
-        email:{type:String,require: true,max:100,},
-        nombre:{type:String,require: true,max:100,},
-        apellido:{type:String,require: true,max:100,},
-        edad:{type:Number,require: true,max:100,},
-        alias:{type:String,require: true,max:100,},
-        avatar:{type:String,require: true,max:100,},
+        email: { type: String, require: true, max: 100, },
+        nombre: { type: String, require: true, max: 100, },
+        apellido: { type: String, require: true, max: 100, },
+        edad: { type: Number, require: true, max: 100, },
+        alias: { type: String, require: true, max: 100, },
+        avatar: { type: String, require: true, max: 100, },
     },
-    fecha:{type: String,require: true,},
-    texto:{type: String,require: true,},
+    fecha: { type: String, require: true, },
+    texto: { type: String, require: true, },
 });
 
 mongoose.connect(mongodb.uri);
 
-class MensajesMongoDb  {
+class MensajesMongoDb {
     constructor() {
         this.model = mongoose.model(collection, mensajesSchema);
     }
 
-    async getMessage () {
+    async getMessage() {
         try {
-            const result = await this.model.find({},{__v:0});
-            const stringMessages = JSON.stringify( result );
+            const result = await this.model.find({}, { __v: 0 });
+            const stringMessages = JSON.stringify(result);
             const messagesParce = JSON.parse(stringMessages);
 
             const mensaje = {
@@ -37,28 +38,28 @@ class MensajesMongoDb  {
                 messages: messagesParce
             };
 
-            const authorSchema = new schema.Entity('author',{},{idAttribute: 'email'});
+            const authorSchema = new schema.Entity('author', {}, { idAttribute: 'email' });
 
-            const mensajeSchema = new schema.Entity('post',{ author: authorSchema }, {idAttribute: '_id' });
+            const mensajeSchema = new schema.Entity('post', { author: authorSchema }, { idAttribute: '_id' });
 
-            const mensajesSchema = new schema.Entity('posts',{messages: [mensajeSchema]});
+            const mensajesSchema = new schema.Entity('posts', { messages: [mensajeSchema] });
 
             const normalizePost = normalize(mensaje, mensajesSchema);
-           
+
             return normalizePost;
         }
         catch (error) {
-            console.log(error);
+            logger.error(error)
         }
     }
 
-    async addMessage (message) {
+    async addMessage(message) {
         try {
             await this.model.create(message);
-            console.log('Mensaje creado exitosamente')
+            logger.info('Mensaje creado exitosamente')
         }
         catch (error) {
-            console.log(error);
+            logger.error(error)
         }
     }
 }

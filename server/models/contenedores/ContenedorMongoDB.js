@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const {mongodb} = require('../../config/config')
+const { mongodb } = require('../../config/config')
+const logger = require('../../logger/loggerConfig');
 
 mongoose.connect(mongodb.uri)
 console.log('Base de datos Mongo Conectado Productos');
@@ -8,82 +9,84 @@ class ContenedorMongoDb {
     constructor(collection, Schema) {
         this.model = mongoose.model(collection, Schema);
     }
-    
-    async getProduct () {
+
+    async getProduct() {
         try {
             const result = await this.model.find();
             const NewObj = result.map(ele => ({
-               id: ele._id,
-               nombre: ele.nombre,
-               precio: ele.precio,
-               foto: ele.foto,
-               codigo: ele.codigo,
-               stock: ele.stock,
-               descripcion: ele.descripcion 
+                id: ele._id,
+                nombre: ele.nombre,
+                precio: ele.precio,
+                foto: ele.foto,
+                codigo: ele.codigo,
+                stock: ele.stock,
+                descripcion: ele.descripcion
             }))
 
             return NewObj;
         }
         catch (error) {
-            console.log(error.message);
+            logger.error(error)
         }
     }
 
-    async getProductId (id) {
+    async getProductId(id) {
         try {
-            const document = await this.model.findById( id );
+            const document = await this.model.findById(id);
 
-            if( document.length === 0 ) {
+            if (document.length === 0) {
 
                 return undefined;
             }
-            
+
             return document;
         }
         catch (error) {
-            console.log(error);
+            logger.error(error)
         }
     }
 
-    async addProduct (product) {
-        try{
+    async addProduct(product) {
+        try {
             await this.model.create(product);
             console.log('Producto Creado exitosamente!');
         }
         catch (error) {
-            console.log(error.message);
+            logger.error(error)
         }
     }
 
-    async updateProduct (producto,id) {
-        try{
+    async updateProduct(producto, id) {
+        try {
             const update = await this.model.updateOne(
                 { _id: id },
-                { $set: {
-                    nombre: producto.nombre,
-                    precio:  producto.precio, 
-                    foto: producto.foto, 
-                    codigo: producto.codigo,
-                    descripcion: producto.descripcion,
-                    stock:  producto.stock
-                }}
+                {
+                    $set: {
+                        nombre: producto.nombre,
+                        precio: producto.precio,
+                        foto: producto.foto,
+                        codigo: producto.codigo,
+                        descripcion: producto.descripcion,
+                        stock: producto.stock
+                    }
+                }
             );
             console.log('Producto actualizado Exitosamente!')
 
             return update;
         }
         catch (error) {
-            console.log(error.message);
+            logger.error(error)
         }
     }
 
-    async deleteProduct (id) {
+    async deleteProduct(id) {
         try {
-            await this.model.deleteMany({ _id: `${id}`});
+            await this.model.deleteMany({ _id: `${id}` });
             console.log(`Producto con ID: ${id} Eliminado!`);
         }
         catch (error) {
-            console.log(error);
+            logger.error(error)
         }
     }
 }

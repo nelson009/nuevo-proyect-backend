@@ -1,11 +1,14 @@
 const path = require("path");
 const express = require("express");
+const compression = require("compression");
+const peticionServerInfo = require('./middleware/logger.info');
 const http = require("http");
 const hbs = require("hbs");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("./middleware/passport");
 const info = require("./router/info/info.router");
+const listarInfoNoDebug = require("./controllers/info.debug")
 const randomNumber = require("./router/randomNumber/process.router");
 const cluster = require("cluster");
 
@@ -48,12 +51,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Template Engine
-hbs.registerPartials(__dirname + "/views/partials", function (err) {});
+hbs.registerPartials(__dirname + "/views/partials", function (err) { });
 app.set("view engine", "hbs");
 app.set("views", __dirname + "/views");
 
 //Rutas
-app.use("/info", info);
+app.use(peticionServerInfo)
+app.use("/info", compression(), info);
+app.use("/info-nodebug", compression(), listarInfoNoDebug);
+// app.use("/info", info);
 app.use("/api", randomNumber);
 app.use("/api", rutasApi);
 app.use(loginAuth);
