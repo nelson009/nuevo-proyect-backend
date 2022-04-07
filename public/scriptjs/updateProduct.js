@@ -25,7 +25,7 @@ const updateProduct = async () => {
     .then(res => res.json())
     .then(res => console.log('post data',res))
     .then(() => {
-        window.location.href = 'https://proyecto-backend-coder.herokuapp.com/listadeproductos.html'
+        window.location.href = 'listadeproductos.html'
     })
 } 
 

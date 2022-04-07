@@ -1,7 +1,7 @@
 const socket = io();
 
 socket.on("tableProduct", (products) => {
-  fetch("https://proyecto-backend-coder.herokuapp.com/template/productos.hbs")
+  fetch("productos.hbs")
     .then((response) => response.text())
     .then((data) => {
       const renderProduct = Handlebars.compile(data);

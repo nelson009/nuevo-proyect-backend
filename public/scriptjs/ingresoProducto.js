@@ -16,7 +16,7 @@ const postProduct = async () => {
         body: JSON.stringify(Newproduct)
     })
     .then(() => {
-        window.location.href = 'http://localhost:8080/listadeproductos.html'
+        window.location.href = 'listadeproductos.html'
     })
 
 }
