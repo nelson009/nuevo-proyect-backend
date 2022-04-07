@@ -63,6 +63,9 @@ app.use("/info-nodebug", compression(), listarInfoNoDebug);
 app.use("/api", randomNumber);
 app.use("/api", rutasApi);
 app.use(loginAuth);
+app.get('/prueba',(req,res)=>{
+  res.send('hola a todos desde heroku')
+});
 app.use("*", ErrorHandling);
 
 io.on("connection", async (socket) => {
