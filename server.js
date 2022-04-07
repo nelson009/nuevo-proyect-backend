@@ -8,7 +8,6 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("./middleware/passport");
 const info = require("./router/info/info.router");
-const listarInfoNoDebug = require("./controllers/info.debug")
 const randomNumber = require("./router/randomNumber/process.router");
 const cluster = require("cluster");
 
@@ -58,14 +57,10 @@ app.set("views", __dirname + "/views");
 //Rutas
 app.use(peticionServerInfo)
 app.use("/info", compression(), info);
-app.use("/info-nodebug", compression(), listarInfoNoDebug);
 // app.use("/info", info);
 app.use("/api", randomNumber);
 app.use("/api", rutasApi);
 app.use(loginAuth);
-app.get('/prueba',(req,res)=>{
-  res.send('hola a todos desde heroku')
-});
 app.use("*", ErrorHandling);
 
 io.on("connection", async (socket) => {

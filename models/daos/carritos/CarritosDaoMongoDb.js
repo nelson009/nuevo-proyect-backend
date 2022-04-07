@@ -65,7 +65,7 @@ class CarritosDaoMongoDb extends ContenedorMongoDB {
         try {
             const result = await this.model.find()
             if( result[0]._id.toString() !== id ) return { error: `El carrito con id ${id} no existe`};
-            console.log('CARRITO GET',result[0].productos)
+            // console.log('CARRITO GET',result[0].productos)
             const newObj = result[0].productos.map(ele => ({
                 id: ele._id,
                 nombre: ele.nombre,

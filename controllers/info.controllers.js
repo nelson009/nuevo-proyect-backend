@@ -3,7 +3,7 @@ const os = require("os");
 
 const listarInfo = (req, res) => {
   let MemoriaRss = process.memoryUsage();
-  console.log(MemoriaRss)
+  // console.log(MemoriaRss)
   const info = {
     // argumento: JSON.stringify(args),
     argumento: process.argv.slice(2),
