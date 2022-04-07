@@ -8,7 +8,7 @@ const postProduct = async () => {
         codigo: document.getElementById('codigo').value
     };
     
-    fetch('http://localhost:8080/api/productos?admin=true', {
+    fetch('https://proyecto-backend-coder.herokuapp.com/api/productos?admin=true', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json;charset=utf-8",

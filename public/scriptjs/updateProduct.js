@@ -15,7 +15,7 @@ const updateProduct = async () => {
     codigo: document.getElementById('codigo').value,
     }
 
-    fetch(`http://localhost:8080/api/productos/${i}?admin=true`, {
+    fetch(`https://proyecto-backend-coder.herokuapp.com/api/productos/${i}?admin=true`, {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -25,11 +25,11 @@ const updateProduct = async () => {
     .then(res => res.json())
     .then(res => console.log('post data',res))
     .then(() => {
-        window.location.href = 'http://localhost:8080/listadeproductos.html'
+        window.location.href = 'https://proyecto-backend-coder.herokuapp.com/listadeproductos.html'
     })
 } 
 
-fetch(`http://localhost:8080/api/productos/${i}`, {
+fetch(`https://proyecto-backend-coder.herokuapp.com/api/productos/${i}`, {
     method: 'GET', 
     headers:{
         'Content-Type': 'application/json'

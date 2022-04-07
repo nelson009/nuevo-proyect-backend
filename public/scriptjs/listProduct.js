@@ -1,4 +1,4 @@
-fetch("http://localhost:8080/api/productos?", {
+fetch("https://proyecto-backend-coder.herokuapp.com/api/productos?", {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -38,19 +38,19 @@ fetch("http://localhost:8080/api/productos?", {
   });
 
 const deleteProduct = (id) => {
-  fetch(`http://localhost:8080/api/productos/${id}?admin=true`, {
+  fetch(`https://proyecto-backend-coder.herokuapp.com/api/productos/${id}?admin=true`, {
     method: "DELETE",
   })
     .then((res) => res.json())
     .then(() => {
-      window.location.href = "http://localhost:8080/listadeproductos.html";
+      window.location.href = "https://proyecto-backend-coder.herokuapp.com/listadeproductos.html";
     })
     .catch((error) => console.error(error));
 };
 
 const addCart = (id) => {
   console.log("estees el tipo de id:", typeof id, +id);
-  fetch(`http://localhost:8080/api/carrito/${id}/productos`, {
+  fetch(`https://proyecto-backend-coder.herokuapp.com/api/carrito/${id}/productos`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

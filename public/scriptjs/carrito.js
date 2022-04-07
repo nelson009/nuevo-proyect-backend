@@ -1,5 +1,5 @@
 let idCart
-fetch(`http://localhost:8080/api/carrito`,{
+fetch(`https://proyecto-backend-coder.herokuapp.com/api/carrito`,{
     method: 'POST', 
     headers:{
         'Content-Type': 'application/json'
@@ -7,7 +7,7 @@ fetch(`http://localhost:8080/api/carrito`,{
 .then(res => res.json())
 .then(id => {
     idCart= id
-fetch(`http://localhost:8080/api/carrito/${id}/productos`,{
+fetch(`https://proyecto-backend-coder.herokuapp.com/api/carrito/${id}/productos`,{
     method: 'GET', 
     headers:{
         'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ document.getElementById('cartProduc').innerHTML = html;
 })
 
 const deleteProduct = (idProduct) => {
-    fetch(`http://localhost:8080/api/carrito/${idCart}/productos/${idProduct}`,{
+    fetch(`https://proyecto-backend-coder.herokuapp.com/api/carrito/${idCart}/productos/${idProduct}`,{
         method: 'DELETE',
     })
     .then(res => res.json())
