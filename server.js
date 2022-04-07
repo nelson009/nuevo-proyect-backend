@@ -103,8 +103,9 @@ if (modoCluster && cluster.isPrimary) {
     );
   });
 } else {
-  // const PORT = args.port;
-  const PORT = process.argv[2] || 8080;
+  // const PORT = process.argv[2] || 8080;
+  const PORT =  process.env.PORT || 8080;
+ 
   const connectedServer = server.listen(PORT, () => {
     console.log(
       "[",
