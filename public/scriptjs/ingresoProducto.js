@@ -1,3 +1,5 @@
+let url = window.location.origin
+
 const postProduct = async () => {
     const Newproduct = {
         nombre: document.getElementById('nombre').value,
@@ -8,7 +10,7 @@ const postProduct = async () => {
         codigo: document.getElementById('codigo').value
     };
     
-    fetch('https://proyecto-backend-coder.herokuapp.com/api/productos?admin=true', {
+    fetch(`${url}/api/productos?admin=true`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json;charset=utf-8",

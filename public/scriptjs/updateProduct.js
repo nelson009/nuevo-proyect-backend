@@ -4,6 +4,7 @@ console.log('windows location',query)
 const id = query.split("=");
 console.log('split', id)
 const i = id[1];
+let url = window.location.origin
 
 const updateProduct = async () => {
     const update = {
@@ -15,7 +16,7 @@ const updateProduct = async () => {
     codigo: document.getElementById('codigo').value,
     }
 
-    fetch(`https://proyecto-backend-coder.herokuapp.com/api/productos/${i}?admin=true`, {
+    fetch(`${url}/api/productos/${i}?admin=true`, {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -29,7 +30,7 @@ const updateProduct = async () => {
     })
 } 
 
-fetch(`https://proyecto-backend-coder.herokuapp.com/api/productos/${i}`, {
+fetch(`${url}/api/productos/${i}`, {
     method: 'GET', 
     headers:{
         'Content-Type': 'application/json'

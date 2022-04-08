@@ -1,5 +1,4 @@
 let url = window.location.origin
-console.log('URL FRONT',url)
 
 fetch(`${url}/api/productos?`, {
   method: "GET",
@@ -22,7 +21,7 @@ fetch(`${url}/api/productos?`, {
             <p class = "nombre-producto">stock: {{stock}}</p>
             <P class = "tamañoLetra">precio: {{precio}}</P>
             <button type="button" class="btn btn-danger" onclick= "deleteProduct('{{id}}')">Eliminar</button>
-            <a href="http://localhost:8080/updateProduct.html?id={{id}}" class="btn btn-primary">Editar</a>
+            <a href="${url}/updateProduct.html?id={{id}}" class="btn btn-primary">Editar</a>
             <button type="button" class="btn btn-success " onclick= "addCart('{{id}}')">Agregar al Carrito</button>
             </div>
         {{/each}}
@@ -46,14 +45,14 @@ const deleteProduct = (id) => {
   })
     .then((res) => res.json())
     .then(() => {
-      window.location.href = "https://proyecto-backend-coder.herokuapp.com/listadeproductos.html";
+      window.location.href = "listadeproductos.html";
     })
     .catch((error) => console.error(error));
 };
 
 const addCart = (id) => {
-  console.log("estees el tipo de id:", typeof id, +id);
-  fetch(`https://proyecto-backend-coder.herokuapp.com/api/carrito/${id}/productos`, {
+  console.log("estes el tipo de id:", typeof id, id);
+  fetch(`${url}/api/carrito/${id}/productos`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

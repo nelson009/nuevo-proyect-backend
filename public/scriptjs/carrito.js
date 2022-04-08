@@ -53,12 +53,12 @@ document.getElementById('cartProduc').innerHTML = html;
 })
 
 const deleteProduct = (idProduct) => {
-    fetch(`https://proyecto-backend-coder.herokuapp.com/api/carrito/${idCart}/productos/${idProduct}`,{
+    fetch(`${url}/api/carrito/${idCart}/productos/${idProduct}`,{
         method: 'DELETE',
     })
     .then(res => res.json())
     .catch( error => console.error(error))
     .then(() => {
-        window.location.href = 'http://localhost:8080/carrito.html'
+        window.location.href = `carrito.html`
     })
 }
