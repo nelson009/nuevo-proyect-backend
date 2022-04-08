@@ -1,5 +1,6 @@
+let url = window.location.origin
 let idCart
-fetch(`https://proyecto-backend-coder.herokuapp.com/api/carrito`,{
+fetch(`${url}/api/carrito`,{
     method: 'POST', 
     headers:{
         'Content-Type': 'application/json'
@@ -7,7 +8,7 @@ fetch(`https://proyecto-backend-coder.herokuapp.com/api/carrito`,{
 .then(res => res.json())
 .then(id => {
     idCart= id
-fetch(`https://proyecto-backend-coder.herokuapp.com/api/carrito/${id}/productos`,{
+fetch(`${url}/api/carrito/${id}/productos`,{
     method: 'GET', 
     headers:{
         'Content-Type': 'application/json'

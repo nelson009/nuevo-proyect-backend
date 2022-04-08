@@ -4,7 +4,7 @@ require("dotenv").config();
 const admin = require("firebase-admin");
 const serviceAccount = require("../DB/coder.json");
 
-const { DATASOURCE, SESSION_SECRET } = process.env;
+const { DATASOURCE, SESSION_SECRET, NODE_ENV } = process.env;
 
 module.exports = {
   mongodb: {
@@ -22,6 +22,7 @@ module.exports = {
   },
   DATASOURCE,
   SESSION_SECRET,
+  NODE_ENV,
   // args: yargs.default({ port: 8080, server: "FORK" }).alias({ s: "server" })
   //   .argv,
 };

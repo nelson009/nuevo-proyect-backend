@@ -1,4 +1,7 @@
-fetch("https://proyecto-backend-coder.herokuapp.com/api/productos?", {
+let url = window.location.origin
+console.log('URL FRONT',url)
+
+fetch(`${url}/api/productos?`, {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -38,7 +41,7 @@ fetch("https://proyecto-backend-coder.herokuapp.com/api/productos?", {
   });
 
 const deleteProduct = (id) => {
-  fetch(`https://proyecto-backend-coder.herokuapp.com/api/productos/${id}?admin=true`, {
+  fetch(`${url}/api/productos/${id}?admin=true`, {
     method: "DELETE",
   })
     .then((res) => res.json())
