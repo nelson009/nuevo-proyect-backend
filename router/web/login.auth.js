@@ -3,54 +3,60 @@ const path = require('path');
 const auth = require('../../middleware/auth');
 const apiRoutes = require('./auth.router')
 // const infoControllers = require('../../controllers/info.controllers')
-
+const { carrito } = require('../../models/index');
 const router = express.Router();
 
 router.use('/', apiRoutes);
 
-router.get('/', (req,res) => {
-    const user =  req.user;
-    if (user) {
+router.get('/', (req, res) => {
+  const user = req.user;
+  if (user) {
 
-      return res.redirect('/profile');
-    }
-    else {
+    return res.redirect('/profile');
+  }
+  else {
 
-      return res.sendFile( path.resolve(__dirname, '../../public/registro.html'));
-    }
+    return res.sendFile(path.resolve(__dirname, '../../public/registro.html'));
+  }
 });
 
 router.get('/profile', auth, async (req, res) => {
-    const {user} = req;
-   
-    res.render("home", { usuario:user.firstName, email:user.email});
-  });
+  const {firstName, email, foto, telefono, edad, direccion} = req.user;
+  const avatar = `/uploads/${foto}`;
+
+  if (req.user) {
+    await carrito.createCarrito(req);
+
+  }
+
+  res.render("home", { firstName,  email, avatar, telefono, edad, direccion });
+});
 
 router.get('/logout', auth, (req, res, next) => {
-    const { firstName } = req.user;
-    req.logOut();
-    
-    return res.render('logout', { firstName });
+  const { firstName } = req.user;
+  req.logOut();
+
+  return res.render('logout', { firstName });
 });
 
-router.get('/login',(req,res)=>{
- 
-    if(!req.isAuthenticated()){
+router.get('/login', (req, res) => {
 
-       return res.sendFile( path.resolve(__dirname, '../../public/login.html'));
-    }
+  if (!req.isAuthenticated()) {
 
-    return res.redirect('/profile');
-   
+    return res.sendFile(path.resolve(__dirname, '../../public/login.html'));
+  };
+
+  return res.redirect('/profile');
+
 });
 
-router.get('/fail-register', (req,res) => {
-    return res.sendFile( path.resolve(__dirname, '../../public/error_register.html'));
-})
+router.get('/fail-register', (req, res) => {
+  return res.sendFile(path.resolve(__dirname, '../../public/error_register.html'));
+});
 
-router.get('/fail-login', (req,res) => {
-    return res.sendFile( path.resolve(__dirname, '../../public/error_login.html'));
-})
+router.get('/fail-login', (req, res) => {
+  return res.sendFile(path.resolve(__dirname, '../../public/error_login.html'));
+});
 
 // router.get('info',infoControllers);
 

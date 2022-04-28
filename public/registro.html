@@ -1,50 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Oswald:wght@500&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/main.css">
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-    <link rel="shortcut icon" href="#">
 
-    <title>Registro-usuario</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Oswald:wght@500&family=Zilla+Slab+Highlight:wght@700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" type="text/css" href="/main.css" />
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+  <link rel="shortcut icon" href="#" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <title>Registro-usuario</title>
 </head>
+
 <body>
-    
-    <form action="/register" class=" container bordeBlanco formulario" method="post">
-        <h1 class="silver animate__animated animate__zoomIn container bordeBlanco mb-5">Registro de Usuario</h1>
-        <div class="form-group">
-          <label for="nombre" >Ingrese su nombre</label>
-          <input type="text" class="form-control" name="firstName"  placeholder="Nombre..." required/>
-        </div>
-        <div class="form-group">
-          <label for="email">E-mail:</label>
-          <input type="email" name="username" class="form-control" placeholder="ejemplo@gmail.com..." required>
-        </div>
-        <div class="form-group">
-          <label for="email">Password</label>
-          <input type="password" class="form-control mt-2" name="password" placeholder="Password..." required/>
-        </div>
-        <input type="submit"  value="Register" class="btn btn-success mt-2"/>
-        <br>
-        <br>
-        <button class="btn btn-success " onclick="goSignup()">Ir a Login</button>
-    </form>
-    <script>
-        function redireccionar(pagina) {
-          location.href = pagina;
-        }
+  <form action="/register" class="container bordeBlanco formulario" enctype="multipart/form-data" method="post"
+    onsubmit="process(event)">
+    <h1 class="silver animate__animated animate__zoomIn container bordeBlanco mb-5">
+      Registro de Usuario
+    </h1>
+    <div class="form-group">
+      <label for="nombre">Ingrese su nombre</label>
+      <input type="text" class="form-control" name="firstName" placeholder="Nombre..." required />
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-mail:</label>
+      <input type="email" name="username" class="form-control" placeholder="ejemplo@gmail.com..." required />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control mt-2" name="password" autocomplete="nueva-contraseña" placeholder="Password..." required />
+    </div>
+
+    <div class="form-group">
+      <label for="direccion">Direccion</label>
+      <input type="text" class="form-control mt-2" name="direccion" placeholder="Direccion..." required />
+    </div>
+
+    <div class="form-group">
+      <label for="edad">Edad</label>
+      <input type="text" class="form-control mt-2" name="edad" placeholder="edad..." required />
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Telefono</label>
+      <br />
+      <input type="tel" class="form-control mt-2" name="phone" required id="phone" required />
+      <div class="alert alert-danger" style="display: none"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="archivo">Foto/Avatar</label>
+      <input type="file" class="form-control mt-2" id="archivo" name="archivo" placeholder="foto..." required />
+    </div>
+    <input type="submit" value="Register" class="btn btn-success mt-2" onclick="process()" />
+    <br />
+    <br />
+    <button class="btn btn-success" onclick="goSignup()">Ir a Login</button>
+  </form>
+  <div class="alert alert-info" style="display: none;"></div>
   
-        function goSignup() {
-          redireccionar("/login");
-        }
-      </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+  <script>
+    function redireccionar(pagina) {
+      location.href = pagina;
+    }
+
+    function goSignup() {
+      redireccionar("/login");
+    }
+
+    const phoneInputField = document.querySelector("#phone");
+    console.log("telefono", phoneInputField)
+    const phoneInput = window.intlTelInput(phoneInputField, {
+      preferredCountries: ["ar","us", "co", "ve"],
+      utilsScript:
+        "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+
+    // document.getElementById("phone").value = "+"+phoneInput.s.dialCode;
+
+    const info = document.querySelector(".alert-info");
+    const error = document.querySelector(".alert-danger");
+    const enviar = document.querySelector(".btn-success");
+
+    // function process() {
+    //   event.preventDefault();
+    //   const phoneNumber = phoneInput.getNumber();
+    //   info.style.display = "";
+    //   info.innerHTML = `Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
+    //   return document.getElementById("phone").value =phoneNumber
+
+    // }
+
+
+    function process() {
+      //  event.preventDefault();
+
+      const phoneNumber = phoneInput.getNumber();
+
+      info.style.display = "none";
+      error.style.display = "none";
+
+      if (phoneInput.isValidNumber()) {
+        info.style.display = "";
+        info.innerHTML = `Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
+
+      } else {
+        event.preventDefault();
+        error.style.display = "";
+        error.innerHTML = `Invalid phone number.`;
+      }
+
+      return document.getElementById("phone").value = phoneNumber
+    }
+
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

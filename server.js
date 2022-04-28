@@ -9,10 +9,12 @@ const MongoStore = require("connect-mongo");
 const passport = require("./middleware/passport");
 const info = require("./router/info/info.router");
 const randomNumber = require("./router/randomNumber/process.router");
+const detalleCompra = require("./router/detalleCompra/detalleCompra.routes");
 const cluster = require("cluster");
+const logger = require("./logger/loggerConfig");
 
 // const { mongodb, SESSION_SECRET, args } = require("./config/config");
-const { mongodb, SESSION_SECRET } = require("./config/config");
+const { mongodb, SESSION_SECRET, MODE_CLUSTER } = require("./config/config");
 const { MensajesMongoDb } = require("./models/index");
 const { productosApi } = require("./controllers/productos.controllers");
 
@@ -27,7 +29,8 @@ const io = require("socket.io")(server);
 
 const mensaje = new MensajesMongoDb();
 // const modoCluster = args.server === "CLUSTER";
-const modoCluster = process.argv[3] === "CLUSTER";
+const modoCluster = MODE_CLUSTER.toUpperCase() === "CLUSTER";
+// const modoCluster =process.argv[3] === "CLUSTER";
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -57,6 +60,7 @@ app.set("views", __dirname + "/views");
 //Rutas
 app.use(peticionServerInfo)
 app.use("/info", compression(), info);
+app.use("/compra-finalizada", detalleCompra)
 // app.use("/info", info);
 app.use("/api", randomNumber);
 app.use("/api", rutasApi);
@@ -79,40 +83,28 @@ if (modoCluster && cluster.isPrimary) {
   // console.log("PORTCLUST", args.port);
   const os = require("os");
 
-  console.log(`I am the primary process! PID =>`, process.pid);
+  logger.info(`I am the primary process! PID => ${process.pid}`);
   const NUM_WORKERS = os.cpus().length;
-  console.log(`NO. Nucleos => ${NUM_WORKERS};`);
+  logger.info(`NO. Nucleos => ${NUM_WORKERS};`);
 
   for (let i = 0; i < NUM_WORKERS; i++) cluster.fork();
 
   cluster.on("exit", (worker, code) => {
-    console.log(
-      "Worker",
-      worker.process.pid,
-      `Exitted on ${new Date().toLocaleDateString()}`
-    );
+    logger.info("Worker",worker.process.pid,`Exitted on ${new Date().toLocaleDateString()}`);
     cluster.fork();
   });
   cluster.on("online", (worker, code) => {
-    console.log(
-      "Worker",
-      worker.process.pid,
-      `Exitted on ${new Date().toLocaleDateString()}`
-    );
+    logger.info(`Worker ${worker.process.pid} Exitted on ${new Date().toLocaleDateString()}`);
   });
 } else {
   // const PORT = process.argv[2] || 8080;
-  const PORT =  process.env.PORT || 8080;
- 
+  const PORT = process.env.PORT || 8080;
+
   const connectedServer = server.listen(PORT, () => {
-    console.log(
-      "[",
-      process.pid,
-      `] => Servidor activo y escuchando en el puerto ${PORT}`
-    );
+    logger.info(`[${process.pid}] => Servidor activo y escuchando en el puerto ${PORT}`);
   });
 
   connectedServer.on("error", (error) => {
-    console.log(error.message);
+    logger.error(error.message);
   });
 }

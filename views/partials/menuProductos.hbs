@@ -18,8 +18,39 @@
         </div>
         <div class="d-flex justify-content-center">
             <a href="https://es-la.facebook.com/" class="btn btn-primary mr-2">F</a>
-            <a href="https://www.youtube.com/" class="btn btn-danger">Y</a>
-            <a href="carrito.html"><img src="./imagen/1x/outline_shopping_cart_white_36dp.png"alt="cart" /></a>
+            <a href="https://www.youtube.com/" class="btn btn-danger mr-2">Y</a>
+            <div>
+                <img class="foto-avatar" src="{{avatar}}" height="35" width="35" onclick="infoUser()"> 
+                <div class="infoUsuario" style="display: none">
+                    <ul>
+                        <li><img class="foto-avatar" src="{{avatar}}" height="80" width="80"></li>
+                        <li>{{firstName}}</li>
+                        <li>{{email}}</li>
+                        <li>{{telefono}}</li>
+                        <li>edad: {{edad}}</li>
+                        <li>{{direccion}}</li>
+                        <li>
+                            <hr>
+                            <button class="btn btn-warning  mt-2" onclick="location.href='/logout'">
+                                Salir
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <a href="carrito.html" class="prueba"><img src="./imagen/1x/outline_shopping_cart_white_36dp.png" alt="cart"/></a>
         </div>
     </div>
 </nav>
+<script>
+    const infoAvatar = document.querySelector('.infoUsuario');
+
+    const infoUser = () => {
+        if (infoAvatar.style.display === "none") {
+
+            infoAvatar.style.display = ""
+        } else {
+            infoAvatar.style.display = "none"
+        }
+    }
+</script>

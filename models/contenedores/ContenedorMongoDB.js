@@ -2,12 +2,25 @@ const mongoose = require('mongoose');
 const { mongodb } = require('../../config/config')
 const logger = require('../../logger/loggerConfig');
 
-mongoose.connect(mongodb.uri)
-console.log('Base de datos Mongo Conectado Productos');
+mongoose.connect(mongodb.uri);
+logger.info('Base de datos Mongo Conectado Productos');
 
 class ContenedorMongoDb {
     constructor(collection, Schema) {
         this.model = mongoose.model(collection, Schema);
+    }
+
+    async filterCarrito(req) {
+        try{
+            const { user } = req;
+            const email = user.email
+            const document = await this.model.findOne({ usuario: email }, { __v: 0 })
+
+            return document;
+        }
+        catch (error) {
+            logger.error(error);
+        }
     }
 
     async getProduct() {
@@ -49,7 +62,7 @@ class ContenedorMongoDb {
     async addProduct(product) {
         try {
             await this.model.create(product);
-            console.log('Producto Creado exitosamente!');
+            logger.info('Producto Creado exitosamente!');
         }
         catch (error) {
             logger.error(error)
@@ -71,7 +84,7 @@ class ContenedorMongoDb {
                     }
                 }
             );
-            console.log('Producto actualizado Exitosamente!')
+            logger.info('Producto actualizado Exitosamente!')
 
             return update;
         }
@@ -83,7 +96,7 @@ class ContenedorMongoDb {
     async deleteProduct(id) {
         try {
             await this.model.deleteMany({ _id: `${id}` });
-            console.log(`Producto con ID: ${id} Eliminado!`);
+            logger.info(`Producto con ID: ${id} Eliminado!`);
         }
         catch (error) {
             logger.error(error)

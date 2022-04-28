@@ -1,10 +1,9 @@
 require("dotenv").config();
-
 // const yargs = require("yargs")(process.argv.splice(2));
 const admin = require("firebase-admin");
 const serviceAccount = require("../DB/coder.json");
 
-const { DATASOURCE, SESSION_SECRET, NODE_ENV } = process.env;
+const { DATASOURCE, SESSION_SECRET, CORREO_GMAIL, GMAIL_PASSORD, ACCOUNT_SID, AUTH_TOKEN, NUMBER_ADMIN, MODE_CLUSTER, PHONE_TWILIO } = process.env;
 
 module.exports = {
   mongodb: {
@@ -22,7 +21,22 @@ module.exports = {
   },
   DATASOURCE,
   SESSION_SECRET,
-  NODE_ENV,
+  GMAIL_PASSORD,
+  configTransport:{
+    service: 'gmail',
+    port: 587,
+    auth: {
+        user: CORREO_GMAIL,
+        pass: GMAIL_PASSORD,
+    },
+    tls: { rejectUnauthorized: false }
+  },
+  CORREO_GMAIL,
+  ACCOUNT_SID,
+  AUTH_TOKEN,
+  NUMBER_ADMIN,
+  MODE_CLUSTER,
+  PHONE_TWILIO ,
   // args: yargs.default({ port: 8080, server: "FORK" }).alias({ s: "server" })
   //   .argv,
 };

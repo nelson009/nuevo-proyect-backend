@@ -1,8 +1,8 @@
 
 const query = window.location.search.substring(1);
-console.log('windows location',query)
+// console.log('windows location',query)
 const id = query.split("=");
-console.log('split', id)
+// console.log('split', id)
 const i = id[1];
 let url = window.location.origin
 
@@ -37,7 +37,7 @@ fetch(`${url}/api/productos/${i}`, {
 }})
 .then(res => res.json())
 .then(data => {
-    console.log('UPDATE',data)
+    // console.log('UPDATE',data)
  
     document.getElementById('nombre').value = data.nombre 
     document.getElementById('precio').value = data.precio 

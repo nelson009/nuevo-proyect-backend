@@ -49,29 +49,29 @@ const mensajesSchema = new normalizr.schema.Entity("posts", {
 });
 
 socket.on("chat", (data) => {
-  console.log("-------------- NORMALIZADO --------------");
+  // console.log("-------------- NORMALIZADO --------------");
 
-  console.log(data);
+  // console.log(data);
   const normalizedLength = JSON.stringify(data).length;
-  console.log(normalizedLength);
+  // console.log(normalizedLength);
 
-  console.log("-------------- DESNORMALIZADO --------------");
+  // console.log("-------------- DESNORMALIZADO --------------");
 
   const denormalizedData = normalizr.denormalize(
     data.result,
     mensajesSchema,
     data.entities
   );
-  console.log(denormalizedData);
+  // console.log(denormalizedData);
   const denormalizedLength = JSON.stringify(denormalizedData).length;
-  console.log(denormalizedLength);
+  // console.log(denormalizedLength);
 
-  console.log("-------------- COMPRESION --------------");
+  // console.log("-------------- COMPRESION --------------");
 
   const compresion = `${Math.round(
     (normalizedLength / denormalizedLength) * 100
   ).toFixed(2)}%`;
-  console.log(compresion);
+  // console.log(compresion);
 
   document.getElementById("messagesId").innerHTML = denormalizedData.messages
     .map(
@@ -90,3 +90,4 @@ socket.on("chat", (data) => {
     "compresion"
   ).innerHTML = `Centro de Mensajes (${compresion})`;
 });
+
