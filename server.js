@@ -1,25 +1,20 @@
 const path = require("path");
 const express = require("express");
-const compression = require("compression");
 const peticionServerInfo = require('./middleware/logger.info');
 const http = require("http");
 const hbs = require("hbs");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("./middleware/passport");
-const info = require("./router/info/info.router");
-const randomNumber = require("./router/randomNumber/process.router");
-const detalleCompra = require("./router/detalleCompra/detalleCompra.routes");
 const cluster = require("cluster");
 const logger = require("./logger/loggerConfig");
 
 // const { mongodb, SESSION_SECRET, args } = require("./config/config");
 const { mongodb, SESSION_SECRET, MODE_CLUSTER } = require("./config/config");
 const { MensajesMongoDb } = require("./models/index");
-const { productosApi } = require("./controllers/productos.controllers");
+const { obtenerProductos } = require("./services/productos/productos.service");
 
 const rutasApi = require("./router/app.routers");
-const loginAuth = require("./router/web/login.auth");
 const ErrorHandling = require("./middleware/errorHandling");
 
 const app = express();
@@ -31,6 +26,7 @@ const mensaje = new MensajesMongoDb();
 // const modoCluster = args.server === "CLUSTER";
 const modoCluster = MODE_CLUSTER.toUpperCase() === "CLUSTER";
 // const modoCluster =process.argv[3] === "CLUSTER";
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -59,17 +55,12 @@ app.set("views", __dirname + "/views");
 
 //Rutas
 app.use(peticionServerInfo)
-app.use("/info", compression(), info);
-app.use("/compra-finalizada", detalleCompra)
-// app.use("/info", info);
-app.use("/api", randomNumber);
-app.use("/api", rutasApi);
-app.use(loginAuth);
+app.use(rutasApi);
 app.use("*", ErrorHandling);
 
 io.on("connection", async (socket) => {
   console.log("connection");
-  io.sockets.emit("tableProduct", await productosApi.getProduct());
+  io.sockets.emit("tableProduct", await obtenerProductos());
   io.sockets.emit("chat", await mensaje.getMessage());
 
   socket.on("messageFront", async (data) => {

@@ -1,7 +1,7 @@
 const express = require('express');
-const detalleCompra = require('../../controllers/detalleCompra.constollers');
+const detalleCompraController = require('../../controllers/detalleCompra.constollers');
 const router = express.Router();
 
-router.get('/', detalleCompra);
+router.get('/', detalleCompraController);
 
 module.exports = router;

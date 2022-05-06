@@ -1,8 +1,8 @@
 // const { fork } = require("child_process");
 // const path = require("path");
-const calculoRandom = require("./processFork")
+const calculoRandom = require("../services/randomNumber/randomNumber.service");
 
-const randomsNumber = (req, res) => {
+const randomsNumberController = (req, res) => {
   const cantidad = req.query.cant || 100000000;
   // const processFork = fork(path.resolve(__dirname, "./processFork.js"));
 
@@ -15,4 +15,5 @@ const randomsNumber = (req, res) => {
   res.status(200).json(calculoRandom(cantidad));
 };
 
-module.exports = randomsNumber;
+module.exports = randomsNumberController;
+

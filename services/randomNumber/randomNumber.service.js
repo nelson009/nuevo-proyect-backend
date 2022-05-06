@@ -11,10 +11,4 @@ const calculoRandom = (cant) => {
     return randoms;
 };
 
-// process.on("message", (data) => {
-//   console.log("CANTDAD :", data);
-//   const ramdomData = calculoRandom(data);
-//   process.send(ramdomData);
-// });
-
 module.exports = calculoRandom;

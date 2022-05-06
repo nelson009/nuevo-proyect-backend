@@ -1,55 +1,48 @@
-const {productosApi} = require('../models/index');
+const {
+    obtenerProductos,
+    obtenerProductoXId,
+    agregarProducto,
+    actualizarProducto,
+    eliminarProducto,
+} = require('../services/productos/productos.service')
 
 const listarProductosController = async (req, res) => {
-    const products = await productosApi.getProduct()
-    // res.render('main', {products})
-    res.status(200).json(products)
-}
+
+    res.status(200).json(await obtenerProductos());
+};
 
 const  listarProductoIdController = async (req, res) => {
     const {id} = req.params;
-    const producto = await productosApi.getProductId(id)
-    if(!producto){
-
-       return res.status(404).send({error: 'producto no encontrado'})
-    }
-    res.status(200).json(producto)
-}
+    const producto = await obtenerProductoXId(id);
+    if(producto.error) return res.status(404).send(producto.error);
+    
+    res.status(200).json(producto);
+};
 
 const guardarProductoController = async (req , res) => {
     const newProduct = req.body;
-    console.log(newProduct)
-    if( !newProduct.nombre || !newProduct.precio || !newProduct.foto){
+    const saveProducto = await agregarProducto(newProduct);
+    if(saveProducto === false) return res.status(404).send({error: 'producto no encontrado'});
 
-        return  res.status(404).send({error: 'producto no encontrado'})
-    }
-    await productosApi.addProduct(newProduct)
-    // res.json(await productosApi.addProduct(newProduct))
-    res.redirect('/')
-}
+    res.redirect('/');
+};
 
 const actualizarProductoController = async (req, res) => {
     const {id} = req.params;
-    const newProduct = req.body
-    const producto = await productosApi.getProductId(id)
-    if(!producto ||  !newProduct.nombre || !newProduct.precio || !newProduct.foto || !newProduct.descripcion || !newProduct.codigo || !newProduct.stock){
+    const newProduct = req.body;
+    const result = await actualizarProducto(newProduct,id);
+    if(result === false) return res.status(404).send({error: 'producto no encontrado'});
 
-        return  res.status(404).send({error: 'producto no encontrado'})
-    }
-    res.json(await productosApi.updateProduct(newProduct, id))
-}
+    res.json(result);
+};
 
 const eliminarProductoController = async (req, res) => {
     const {id} = req.params;
-    const producto = await productosApi.getProductId(id)
-    if(!producto){
-
-        return res.status(404).send({error: 'producto no encontrado'})
-    }
-    await productosApi.deleteProduct(id)
-
-    res.json('producto eliminado correctamente')
-}
+    const result = await eliminarProducto(id)
+    if(result === false) return res.status(404).send({error: 'producto no encontrado'});
+  
+    res.json(result);
+};
 
 module.exports = {
     listarProductosController,
@@ -57,5 +50,4 @@ module.exports = {
     guardarProductoController,
     actualizarProductoController,
     eliminarProductoController,
-    productosApi,
-}
+};

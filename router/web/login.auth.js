@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 const auth = require('../../middleware/auth');
 const apiRoutes = require('./auth.router')
-// const infoControllers = require('../../controllers/info.controllers')
-const { carrito } = require('../../models/index');
 const router = express.Router();
 
 router.use('/', apiRoutes);
@@ -18,18 +16,6 @@ router.get('/', (req, res) => {
 
     return res.sendFile(path.resolve(__dirname, '../../public/registro.html'));
   }
-});
-
-router.get('/profile', auth, async (req, res) => {
-  const {firstName, email, foto, telefono, edad, direccion} = req.user;
-  const avatar = `/uploads/${foto}`;
-
-  if (req.user) {
-    await carrito.createCarrito(req);
-
-  }
-
-  res.render("home", { firstName,  email, avatar, telefono, edad, direccion });
 });
 
 router.get('/logout', auth, (req, res, next) => {
@@ -57,7 +43,5 @@ router.get('/fail-register', (req, res) => {
 router.get('/fail-login', (req, res) => {
   return res.sendFile(path.resolve(__dirname, '../../public/error_login.html'));
 });
-
-// router.get('info',infoControllers);
 
 module.exports = router;

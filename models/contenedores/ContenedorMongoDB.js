@@ -47,10 +47,10 @@ class ContenedorMongoDb {
         try {
             const document = await this.model.findById(id);
 
-            if (document.length === 0) {
+            // if (document.length === 0) {
 
-                return undefined;
-            }
+            //     return undefined;
+            // }
 
             return document;
         }

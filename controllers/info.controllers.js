@@ -1,7 +1,7 @@
 // const {args} = require('../config/config')
 const os = require("os");
 
-const listarInfo = (req, res) => {
+const listarInfoController = (req, res) => {
   let MemoriaRss = process.memoryUsage();
   // console.log(MemoriaRss)
   const info = {
@@ -19,4 +19,5 @@ const listarInfo = (req, res) => {
   res.render("info", { info });
 };
 
-module.exports = listarInfo;
+module.exports = listarInfoController;
+
