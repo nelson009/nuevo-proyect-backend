@@ -8,6 +8,7 @@ const { DATASOURCE, SESSION_SECRET, CORREO_GMAIL, GMAIL_PASSORD, ACCOUNT_SID, AU
 module.exports = {
   mongodb: {
     uri: `mongodb+srv://nelson:${process.env.DB_PASSWORD}@cluster0.2vdgf.mongodb.net/ecommerce2?retryWrites=true&w=majority`,
+    projection: { __v:0 },
   },
   FirebaseCredencial: {
     credential: admin.credential.cert(serviceAccount),

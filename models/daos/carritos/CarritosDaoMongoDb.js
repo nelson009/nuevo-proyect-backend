@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
-const ContenedorMongoDB = require('../../contenedores/ContenedorMongoDB')
+const ContenedorMongoDB = require('../../contenedores/ContenedorMongoDB');
 const logger = require('../../../logger/loggerConfig');
 
 const Schema = mongoose.Schema;
 const collection = 'carritos';
+let carritoInstance = null;
 
 const carritoSchema = new Schema({
     usuario: { type: String, require: true },
@@ -23,7 +24,12 @@ const carritoSchema = new Schema({
 
 class CarritosDaoMongoDb extends ContenedorMongoDB {
     constructor() {
-        super(collection, carritoSchema)
+        if(!carritoInstance){
+            super(collection, carritoSchema);
+            carritoInstance = this;
+        } else {
+            return carritoInstance
+        }
     }
 
     async createCarrito(req) {

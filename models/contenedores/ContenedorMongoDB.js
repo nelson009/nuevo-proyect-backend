@@ -1,20 +1,28 @@
 const mongoose = require('mongoose');
-const { mongodb } = require('../../config/config')
+const { mongodb } = require('../../config/config');
+const MongoDBClient = require('../../DB/mongo/MongoDBClient');
 const logger = require('../../logger/loggerConfig');
 
-mongoose.connect(mongodb.uri);
-logger.info('Base de datos Mongo Conectado Productos');
 
+///en esta clase estaria la logica generica dependiendo de la fuente de datos . En este caso mongo
+let contMongoInstance = null;
 class ContenedorMongoDb {
     constructor(collection, Schema) {
+        this.proyection = mongodb.projection;
         this.model = mongoose.model(collection, Schema);
+        if(!contMongoInstance){
+            this.client = new MongoDBClient(mongodb.uri);
+            contMongoInstance = this.client.connect();
+        } else {
+            return
+        }
     }
 
     async filterCarrito(req) {
         try{
             const { user } = req;
             const email = user.email
-            const document = await this.model.findOne({ usuario: email }, { __v: 0 })
+            const document = await this.model.findOne({ usuario: email }, this.proyection );
 
             return document;
         }
@@ -23,9 +31,9 @@ class ContenedorMongoDb {
         }
     }
 
-    async getProduct() {
+    async getProduct(filter = {}) {
         try {
-            const result = await this.model.find();
+            const result = await this.model.find(filter, this.proyection).lean();
             const NewObj = result.map(ele => ({
                 id: ele._id,
                 nombre: ele.nombre,
@@ -35,7 +43,7 @@ class ContenedorMongoDb {
                 stock: ele.stock,
                 descripcion: ele.descripcion
             }))
-
+            console.log('GET PRODUCTS', result)
             return NewObj;
         }
         catch (error) {
@@ -45,7 +53,7 @@ class ContenedorMongoDb {
 
     async getProductId(id) {
         try {
-            const document = await this.model.findById(id);
+            const document = await this.model.findById(id, this.proyection).lean();
 
             // if (document.length === 0) {
 
@@ -61,8 +69,9 @@ class ContenedorMongoDb {
 
     async addProduct(product) {
         try {
-            await this.model.create(product);
+            const add = (await this.model.create(product)).doc;
             logger.info('Producto Creado exitosamente!');
+            console.log('AGREGAR', add)
         }
         catch (error) {
             logger.error(error)

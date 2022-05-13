@@ -56,13 +56,13 @@ const finalizarCompra = async (req) => {
     
     enviarCorreo(htmlCartLi, email, firstName, totalPrecio);
 
-     //para que le llegue un mensaje de texto al usuario . Este numero de tel(user) tiene que estar registrado previamenete en twilio
-    const mesaggeTwilioAuser = "su pedido ha sido recibido y se encuentra en proceso"
-    enviarMensaje(PHONE_TWILIO , telefono, mesaggeTwilioAuser);
+    //  //para que le llegue un mensaje de texto al usuario . Este numero de tel(user) tiene que estar registrado previamenete en twilio
+    // const mesaggeTwilioAuser = "su pedido ha sido recibido y se encuentra en proceso"
+    // enviarMensaje(PHONE_TWILIO , telefono, mesaggeTwilioAuser);
 
-    //en watssap hay que enviar "join done-willing" al nuemero de twilio cada 72 hs. Para que llegue el mensaje
-    const MesaggeWhatsapp = `nuevo pedido de ${firstName}, ${email}`
-    enviarMensaje('whatsapp:+14155238886', `whatsapp:${NUMBER_ADMIN}`, MesaggeWhatsapp)
+    // //en watssap hay que enviar "join done-willing" al nuemero de twilio cada 72 hs. Para que llegue el mensaje
+    // const MesaggeWhatsapp = `nuevo pedido de ${firstName}, ${email}`
+    // enviarMensaje('whatsapp:+14155238886', `whatsapp:${NUMBER_ADMIN}`, MesaggeWhatsapp)
 
     return  await carrito.deleteCarrito(idCarrito.toString(),req);
 };

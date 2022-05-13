@@ -2,11 +2,17 @@ const ContenedorFirebase = require("../../contenedores/ContenedorFirebase");
 const FieldValue = require('firebase-admin').firestore.FieldValue
 
 const collection = "carrito"
+let carritoInstance = null;
 
 class CarritoDaoFirebase extends ContenedorFirebase {
     constructor() {
         super(collection);
         this.createCarrito();
+        if(!carritoInstance){
+            carritoInstance = this;
+        } else {
+            return carritoInstance
+        }
     }
 
     async leerCarrito() {

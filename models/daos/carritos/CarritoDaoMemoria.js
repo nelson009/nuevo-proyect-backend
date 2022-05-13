@@ -1,5 +1,5 @@
 const ContenedorMemoria = require("../../contenedores/ContenedorMemoria");
-
+let carritoInstance = null;
 
 class CarritoDaoMemoria extends ContenedorMemoria {
     static contadoId = 0;
@@ -8,6 +8,11 @@ class CarritoDaoMemoria extends ContenedorMemoria {
         this.idCarrito = ++CarritoDaoMemoria.contadoId;
         this.carrito ;
         this.createCarrito();
+        if(!carritoInstance){
+            carritoInstance = this;
+        } else {
+            return carritoInstance
+        }
     }
 
     async createCarrito () {

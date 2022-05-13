@@ -1,5 +1,6 @@
 const fs = require("fs");
 const ContenedorArchivo = require("../../contenedores/ContenedorArchivo");
+let carritoInstance = null;
 
 class  CarritoDaoArchivo extends ContenedorArchivo {
     static contadorId = 0;
@@ -7,6 +8,11 @@ class  CarritoDaoArchivo extends ContenedorArchivo {
         super( "./data/persistenciaFs/carrito.txt" )
         this.idCarrito = ++CarritoDaoArchivo.contadorId;
         this.createCarrito()
+        if(!carritoInstance){
+            carritoInstance = this;
+        } else {
+            return carritoInstance
+        }
     }
 
     async createCarrito () {

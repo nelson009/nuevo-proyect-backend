@@ -14,11 +14,22 @@ const productoSchema = new Schema({
     descripcion: {type: String,require: true,},
     submit: {type: String,}
 });
+
+let productInstance = null;
 //super EJECUTA EL CONSTRUCTOR DE LA CLASE PADRE
 class ProductsDaoMongoDb extends ContenedorMongoDB {
     constructor () {
-        super(collection, productoSchema);
+        if(!productInstance){
+            super(collection, productoSchema);
+            productInstance = this;
+        } else {
+            return productInstance;
+        }
     }
-}
+    get data() {
+        return this._data;
+    }
+};
 
 module.exports = ProductsDaoMongoDb;
+

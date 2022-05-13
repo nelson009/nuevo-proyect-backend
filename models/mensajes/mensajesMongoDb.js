@@ -1,8 +1,11 @@
+
+const ContenedorMongoDb = require('../contenedores/ContenedorMongoDB');
 const mongoose = require('mongoose');
 const { mongodb } = require('../../config/config')
 const logger = require("../../logger/loggerConfig");
 
 const { normalize, schema } = require('normalizr');
+
 
 const Schema = mongoose.Schema;
 const collection = 'mensajes';
@@ -20,19 +23,25 @@ const mensajesSchema = new Schema({
     texto: { type: String, require: true, },
 });
 
-mongoose.connect(mongodb.uri);
+// mongoose.connect(mongodb.uri);
+let mensajeInstance = null;
 
-class MensajesMongoDb {
+class MensajesMongoDb extends ContenedorMongoDb{
     constructor() {
-        this.model = mongoose.model(collection, mensajesSchema);
+        if(!mensajeInstance) {
+            super(collection, mensajesSchema);
+            mensajeInstance = this;
+        } else {
+            return mensajeInstance;
+        }
     }
 
     async getMessage() {
         try {
-            const result = await this.model.find({}, { __v: 0 });
+            const result = await this.model.find({}, this.proyection).lean();
             const stringMessages = JSON.stringify(result);
             const messagesParce = JSON.parse(stringMessages);
-
+        
             const mensaje = {
                 id: 'mensajes',
                 messages: messagesParce

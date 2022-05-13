@@ -11,7 +11,7 @@ const logger = require("./logger/loggerConfig");
 
 // const { mongodb, SESSION_SECRET, args } = require("./config/config");
 const { mongodb, SESSION_SECRET, MODE_CLUSTER } = require("./config/config");
-const { MensajesMongoDb } = require("./models/index");
+const MensajeRepository = require('./repositories/mensaje.repository');
 const { obtenerProductos } = require("./services/productos/productos.service");
 
 const rutasApi = require("./router/app.routers");
@@ -22,7 +22,7 @@ const server = http.createServer(app);
 const io = require("socket.io")(server);
 // const PORT = args.port
 
-const mensaje = new MensajesMongoDb();
+const mensaje = new MensajeRepository();
 // const modoCluster = args.server === "CLUSTER";
 const modoCluster = MODE_CLUSTER.toUpperCase() === "CLUSTER";
 // const modoCluster =process.argv[3] === "CLUSTER";
@@ -61,12 +61,12 @@ app.use("*", ErrorHandling);
 io.on("connection", async (socket) => {
   console.log("connection");
   io.sockets.emit("tableProduct", await obtenerProductos());
-  io.sockets.emit("chat", await mensaje.getMessage());
+  io.sockets.emit("chat", await mensaje.getaAll());
 
   socket.on("messageFront", async (data) => {
     data.fecha = new Date().toLocaleString("es-AR", "DD-M-YYYY HH:MM:SS");
-    await mensaje.addMessage(data);
-    io.sockets.emit("chat", await mensaje.getMessage());
+    await mensaje.create(data);
+    io.sockets.emit("chat", await mensaje.getaAll());
   });
 });
 

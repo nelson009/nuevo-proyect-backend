@@ -1,8 +1,14 @@
 const ContenedorArchivo = require("../../contenedores/ContenedorArchivo");
+let productInstance = null;
 
 class ProductsDaoArchivo extends ContenedorArchivo {
     constructor () {
         super('./data/persistenciaFs/productos.txt');
+        if(!productInstance){
+            productInstance = this;
+        } else {
+            return productInstance;
+        }
     }
 }
 
