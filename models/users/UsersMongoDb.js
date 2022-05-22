@@ -3,6 +3,7 @@ const { mongodb, CORREO_GMAIL, configTransport } = require('../../config/config'
 const { createTransport } = require('nodemailer');
 const path = require("path");
 const logger = require("../../logger/loggerConfig");
+const ContenedorMongoDb = require('../contenedores/ContenedorMongoDB');
 
 const transporter = createTransport(configTransport)
 const enviarCorreo = async (usuario) => {
@@ -56,11 +57,16 @@ const userSchema = new Schema({
     foto: { type: String },
 });
 
-mongoose.connect(mongodb.uri);
+// mongoose.connect(mongodb.uri);
 
-class UserMongoDb {
+class UserMongoDb extends ContenedorMongoDb {
+    // constructor() {
+    //     this.model = mongoose.model(collection, userSchema);
+    // }
+
     constructor() {
-        this.model = mongoose.model(collection, userSchema);
+        super(collection, userSchema);
+
     }
 
     async getAll(filter = {}) {

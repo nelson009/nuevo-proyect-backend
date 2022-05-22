@@ -22,3 +22,10 @@ const postProduct = async () => {
     })
 
 }
+
+// .then((data) => {
+//     if(data.status === 400) {
+//         window.location.href = 'listadeproductos.html'
+//     }
+//     // window.location.href = 'listadeproductos.html'
+// })

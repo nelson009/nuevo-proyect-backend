@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/*.test.js",
     "start": "node server.js",
     "start-dev": "nodemon -r dotenv/config",
     "foreverF": "forever start -w server.js 8080 FORK",
@@ -23,7 +23,9 @@
   "license": "ISC",
   "dependencies": {
     "autocannon": "^7.8.1",
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
+    "chai": "^4.3.6",
     "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
     "dotenv": "^16.0.0",
@@ -34,6 +36,7 @@
     "firebase-admin": "^10.0.2",
     "hbs": "^4.2.0",
     "knex": "^0.95.11",
+    "mocha": "^10.0.0",
     "mongoose": "^6.2.1",
     "multer": "^1.4.4",
     "mysql": "^2.18.1",
@@ -43,8 +46,10 @@
     "passport-local": "^1.0.0",
     "socket.io": "^4.4.1",
     "sqlite3": "^5.0.2",
+    "supertest": "^6.2.3",
     "twilio": "^3.76.1",
     "winston": "^3.6.0",
-    "yargs": "^17.4.0"
+    "yargs": "^17.4.0",
+    "yup": "^0.32.11"
   }
 }

@@ -1,47 +1,74 @@
+//controller la unica responsabilidad que tiene es recibir la peticion del cliente(req) y entregar la respuesta del cliente(res) .No se encarga de nada mas y redirigir en caso de algun error al middleare de error
 const {
     obtenerProductos,
     obtenerProductoXId,
     agregarProducto,
     actualizarProducto,
     eliminarProducto,
-} = require('../services/productos/productos.service')
+} = require('../services/productos/productos.service');
+const { STATUS } = require('../utils/constants/api.constants');
+const { apiSuccessResponse } = require('../utils/utils');
 
 const listarProductosController = async (req, res) => {
-
-    res.status(200).json(await obtenerProductos());
+    try {
+        const productos = await obtenerProductos();
+        const response = apiSuccessResponse(productos, STATUS.OK);
+        return res.status(STATUS.OK).json(response.data);
+    }
+    catch (error) {
+        //en el catch lo que hacemos utilizar el next() para redirigir todos los erores a nuestro middleware de error
+        next(error);
+    }
 };
 
-const  listarProductoIdController = async (req, res) => {
-    const {id} = req.params;
-    const producto = await obtenerProductoXId(id);
-    if(producto.error) return res.status(404).send(producto.error);
-    
-    res.status(200).json(producto);
+const  listarProductoIdController = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+        const producto = await obtenerProductoXId(id);
+        const response = apiSuccessResponse(producto, STATUS.OK);
+        return res.status(STATUS.OK).json(response.data);
+    }
+    catch (error) {
+        next(error);
+    }
 };
 
-const guardarProductoController = async (req , res) => {
-    const newProduct = req.body;
-    const saveProducto = await agregarProducto(newProduct);
-    if(saveProducto === false) return res.status(404).send({error: 'producto no encontrado'});
-
-    res.redirect('/');
+const guardarProductoController = async (req , res, next) => {
+    try {
+        const newProduct = req.body;
+        const saveProducto = await agregarProducto(newProduct);
+        const response = apiSuccessResponse(saveProducto, STATUS.CREATED);
+        return res.status(STATUS.CREATED).json(response.data);
+        // res.redirect('/');
+    }
+    catch (error) {
+        next(error);
+    }
 };
 
-const actualizarProductoController = async (req, res) => {
-    const {id} = req.params;
-    const newProduct = req.body;
-    const result = await actualizarProducto(newProduct,id);
-    if(result === false) return res.status(404).send({error: 'producto no encontrado'});
-
-    res.json(result);
+const actualizarProductoController = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+        const newProduct = req.body;
+        const result = await actualizarProducto(newProduct,id);
+        const response = apiSuccessResponse(result, STATUS.OK);
+        return res.status(STATUS.OK).json(response.data);
+    }
+    catch (error) {
+        next(error);
+    }
 };
 
-const eliminarProductoController = async (req, res) => {
-    const {id} = req.params;
-    const result = await eliminarProducto(id)
-    if(result === false) return res.status(404).send({error: 'producto no encontrado'});
-  
-    res.json(result);
+const eliminarProductoController = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+        const result = await eliminarProducto(id);
+        const response = apiSuccessResponse(result, STATUS.OK);
+        return res.status(STATUS.OK).json(response.data);
+    }
+    catch (error) {
+        next(error);
+    }
 };
 
 module.exports = {

@@ -5,7 +5,8 @@ let carritoInstance = null;
 class  CarritoDaoArchivo extends ContenedorArchivo {
     static contadorId = 0;
     constructor(){
-        super( "./data/persistenciaFs/carrito.txt" )
+        // super( "./data/persistenciaFs/carrito.txt" )
+        super( "/DB/persistenciaFs/carrito.txt" );
         this.idCarrito = ++CarritoDaoArchivo.contadorId;
         this.createCarrito()
         if(!carritoInstance){
@@ -17,6 +18,7 @@ class  CarritoDaoArchivo extends ContenedorArchivo {
 
     async createCarrito () {
         const result = await this.readCarrito()
+        // const result = await this.read()
         try{
             if( !result.productos ){
                 const carritoCreate  = {

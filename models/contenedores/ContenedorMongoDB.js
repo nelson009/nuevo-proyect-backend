@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 const { mongodb } = require('../../config/config');
 const MongoDBClient = require('../../DB/mongo/MongoDBClient');
 const logger = require('../../logger/loggerConfig');
-
+const { STATUS } = require('../../utils/constants/api.constants');
+const CustomError = require('../../utils/error/CustomError');
+const ProductoDTO = require('../dtos/producto.dto');
 
 ///en esta clase estaria la logica generica dependiendo de la fuente de datos . En este caso mongo
 let contMongoInstance = null;
@@ -10,12 +12,27 @@ class ContenedorMongoDb {
     constructor(collection, Schema) {
         this.proyection = mongodb.projection;
         this.model = mongoose.model(collection, Schema);
-        if(!contMongoInstance){
-            this.client = new MongoDBClient(mongodb.uri);
-            contMongoInstance = this.client.connect();
-        } else {
-            return
+        // if(!contMongoInstance){
+        //     logger.info('conectandose base de datos...')
+        //     this.client = new MongoDBClient(mongodb.uri);
+        //     contMongoInstance = this.client.connect();
+        // }
+    }
+
+    // async getAll (filter = {}) {
+    //     const result = await this.model.find(filter, this.proyection).lean();
+    //     return result;
+    // }
+
+    async verificarExistenciaProduct(id) {
+        const document = await this.model.findById(id, this.proyection).lean();
+        if (!document) {
+            throw new CustomError(
+                STATUS.NOT_FOUND,
+                `el producto con id: ${id} no existe en el registro`
+            );
         }
+        return document;
     }
 
     async filterCarrito(req) {
@@ -41,74 +58,93 @@ class ContenedorMongoDb {
                 foto: ele.foto,
                 codigo: ele.codigo,
                 stock: ele.stock,
-                descripcion: ele.descripcion
+                descripcion: ele.descripcion,
+                timestamp: ele.timestamp
             }))
-            console.log('GET PRODUCTS', result)
+            
             return NewObj;
         }
         catch (error) {
-            logger.error(error)
+            throw new CustomError(
+                STATUS.INTERNAL_ERROR,
+                'Error buscando productos',
+                error,
+            );
         }
     }
 
     async getProductId(id) {
         try {
-            const document = await this.model.findById(id, this.proyection).lean();
-
-            // if (document.length === 0) {
-
-            //     return undefined;
+            // const document = await this.model.findById(id, this.proyection).lean();
+            // if (!document) {
+            //     throw new CustomError(
+            //         STATUS.NOT_FOUND,
+            //         `el producto con id: ${id} no existe en el registro`
+            //     );
             // }
+            const document = await this.verificarExistenciaProduct(id)
 
             return document;
         }
         catch (error) {
-            logger.error(error)
+            throw new CustomError(
+                STATUS.INTERNAL_ERROR,
+                `Error buscando producto por ${id}`,
+                error,
+            );
         }
     }
 
     async addProduct(product) {
         try {
-            const add = (await this.model.create(product)).doc;
+            const newProduct = new ProductoDTO(product)
+            await this.model.create(newProduct);
             logger.info('Producto Creado exitosamente!');
-            console.log('AGREGAR', add)
+
+            return newProduct
         }
         catch (error) {
-            logger.error(error)
+            throw new CustomError(
+                STATUS.INTERNAL_ERROR,
+                'Error creando producto',
+                error,
+            );
         }
     }
 
     async updateProduct(producto, id) {
         try {
-            const update = await this.model.updateOne(
-                { _id: id },
-                {
-                    $set: {
-                        nombre: producto.nombre,
-                        precio: producto.precio,
-                        foto: producto.foto,
-                        codigo: producto.codigo,
-                        descripcion: producto.descripcion,
-                        stock: producto.stock
-                    }
-                }
-            );
+            await this.verificarExistenciaProduct(id);
+            const updateProduct = new ProductoDTO({...producto, timestamp: Date.now()},null)
+            await this.model.updateOne({ _id: id }, {$set: updateProduct});
             logger.info('Producto actualizado Exitosamente!')
-
-            return update;
+          
+            return updateProduct;
         }
         catch (error) {
-            logger.error(error)
+            throw new CustomError(
+                STATUS.INTERNAL_ERROR,
+                'Error actualizando producto',
+                error,
+            );
         }
     }
 
     async deleteProduct(id) {
         try {
-            await this.model.deleteMany({ _id: `${id}` });
+            await this.verificarExistenciaProduct(id);
+            const deleteProduct = new ProductoDTO({},id);
+            await this.model.deleteMany({ _id: id });
             logger.info(`Producto con ID: ${id} Eliminado!`);
+    
+            return deleteProduct;
         }
         catch (error) {
-            logger.error(error)
+            throw new CustomError(
+                STATUS.INTERNAL_ERROR,
+                'Error eliminando producto',
+                error,
+            );
         }
     }
 }

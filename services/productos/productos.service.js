@@ -1,51 +1,7 @@
-// const { productosApi } = require('../../models/index');
-
-// const obtenerProductos = async () => {
-//     return await productosApi.getProduct();
-// };
-
-// const obtenerProductoXId = async (id) => {
-//     const productoId = await productosApi.getProductId(id);
-//     if (!productoId) {
-//         return { error: 'producto no encontrado' };
-//     }
-
-//     return productoId;
-// };
-
-// const agregarProducto = async (newProduct) => {
-//     if (!newProduct.nombre || !newProduct.precio || !newProduct.foto) {
-//         return false;
-//     }
-
-//     await productosApi.addProduct(newProduct);
-// };
-
-// const actualizarProducto = async (newProduct, id) => {
-//     const producto = await productosApi.getProductId(id);
-//     if (!producto || !newProduct.nombre || !newProduct.precio || !newProduct.foto || !newProduct.descripcion || !newProduct.codigo || !newProduct.stock) {
-//         return false;
-//     };
-
-//     return await productosApi.updateProduct(newProduct, id);
-// };
-
-// const eliminarProducto = async (id) => {
-//     const productoXId = await productosApi.getProductId(id);
-//     if (!productoXId) {
-//         return false;
-//     };
-//     await productosApi.deleteProduct(id);
-
-//     return 'producto eliminado correctamente';
-// }
-
-// module.exports = { obtenerProductos, obtenerProductoXId, agregarProducto, actualizarProducto, eliminarProducto };
-
-
-
-// const { productosApi } = require('../../models/index');
+const ProductoSchema = require('../../models/schemas/Producto/Producto.schema');
 const ProductsRepository = require('../../repositories/products.repository');
+const { STATUS } = require('../../utils/constants/api.constants');
+const CustomError = require('../../utils/error/CustomError');
 const productsRepository = new ProductsRepository();
 
 const obtenerProductos = async () => {
@@ -53,39 +9,40 @@ const obtenerProductos = async () => {
 };
 
 const obtenerProductoXId = async (id) => {
-    const productoId = await productsRepository.getId(id);
-    if (!productoId) {
-        return { error: 'producto no encontrado' };
+    if((!id)) {
+        throw new CustomError(STATUS.BAD_REQUEST, 'el parámetro id no es válido o no existe');
     }
 
-    return productoId;
+    return await productsRepository.getId(id);
 };
 
 const agregarProducto = async (newProduct) => {
-    if (!newProduct.nombre || !newProduct.precio || !newProduct.foto) {
-        return false;
-    }
-
-    await productsRepository.create(newProduct);
+    await validateProduct(newProduct);
+    return await productsRepository.create(newProduct);
 };
 
 const actualizarProducto = async (newProduct, id) => {
-    const producto = await productsRepository.getId(id);
-    if (!producto || !newProduct.nombre || !newProduct.precio || !newProduct.foto || !newProduct.descripcion || !newProduct.codigo || !newProduct.stock) {
-        return false;
-    };
-
+    if(!id) {
+        throw new CustomError(STATUS.BAD_REQUEST, 'el parámetro id no es válido o no existe');
+    }
+    await validateProduct(newProduct);
     return await productsRepository.update(newProduct, id);
 };
 
 const eliminarProducto = async (id) => {
-    const productoXId = await productsRepository.getId(id);
-    if (!productoXId) {
-        return false;
-    };
-    await productsRepository.delete(id);
+    if(!id) {
+        throw new CustomError(STATUS.BAD_REQUEST, 'el parámetro id no es válido o no existe');
+    }
+    return  await productsRepository.delete(id);
+}
 
-    return 'producto eliminado correctamente';
+const validateProduct = async (product) => {
+    try {
+        await ProductoSchema.validate(product);
+    }
+    catch(error) {
+        throw new CustomError(STATUS.BAD_REQUEST, 'validation error', error);
+    }
 }
 
 module.exports = { obtenerProductos, obtenerProductoXId, agregarProducto, actualizarProducto, eliminarProducto };
