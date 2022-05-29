@@ -1,31 +1,59 @@
-const express = require('express');
-const errorMiddleware = require('../middleware/error.middleware');
-const rutasProductos = require('./productos/productos.routes');
-const rutasCarrito = require('./carrito/carrito.routes');
-const rutaFaker = require('./pructosFaker/productFaker.routes')
-const rutaNumberRandom = require('./randomNumber/process.router');
-const rutacompraFinalizada = require('./detalleCompra/detalleCompra.routes');
-const rutaInfo = require('./info/info.router');
-const compression = require('compression');
-const rutaPerfil = require('./profile/profile.routes');
-const loginAuth = require('./web/login.auth');
-const auth = require('../middleware/auth');
 
+const expressGraphql = require("express-graphql");
+const graphql = require("graphql");
+const {
+    listarProductosController,
+    listarProductoIdController,
+    guardarProductoController,
+    actualizarProductoController,
+    eliminarProductoController,
+} = require('../controllers/productos.controllers');
 
-const router = express.Router();
-// Middleware
+class RouterProductos {
 
-// Roustes
-router.use('/api/productos', rutasProductos,);
-router.use('/api/carrito', rutasCarrito);
-router.use('/api/productos-test', rutaFaker);
-router.use('/api',rutaNumberRandom);
-router.use('/compra-finalizada', rutacompraFinalizada);
-router.use('/info', compression(), rutaInfo);
-router.use('/profile', auth, rutaPerfil);
-router.use(loginAuth);
+  start() {
+    const schema = graphql.buildSchema(`
+    type Producto {
+        id: ID!
+        nombre: String,
+        precio: Int,
+        foto: String,
+        codigo: String,
+        stock: Int,
+        descripcion: String,
+        timestamp: String,
+      }
+      input ProductoInput {
+        nombre: String,
+        precio: Int,
+        foto: String,
+        codigo: String,
+        stock: Int,
+        descripcion: String,
+      }
+      type Query {
+        listarProductoIdController(id: ID!): Producto,
+        listarProductosController(campo: String, valor: String): [Producto],
+      }
+      type Mutation {
+        guardarProductoController(datos: ProductoInput): Producto
+        actualizarProductoController(id: ID!, datos: ProductoInput): Producto,
+        eliminarProductoController(id: ID!): Producto,
+      }
+    `);
 
-// Error middleware
-router.use(errorMiddleware);
+    return expressGraphql.graphqlHTTP({
+      schema,
+      rootValue: {
+        listarProductoIdController,
+        listarProductosController,
+        guardarProductoController,
+        actualizarProductoController,
+        eliminarProductoController
+      },
+      graphiql: true,
+    });
+  }
+}
 
-module.exports = router;
+module.exports = RouterProductos;

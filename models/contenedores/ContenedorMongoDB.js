@@ -12,11 +12,11 @@ class ContenedorMongoDb {
     constructor(collection, Schema) {
         this.proyection = mongodb.projection;
         this.model = mongoose.model(collection, Schema);
-        // if(!contMongoInstance){
-        //     logger.info('conectandose base de datos...')
-        //     this.client = new MongoDBClient(mongodb.uri);
-        //     contMongoInstance = this.client.connect();
-        // }
+        if(!contMongoInstance){
+            logger.info('conectandose base de datos...')
+            this.client = new MongoDBClient(mongodb.uri);
+            contMongoInstance = this.client.connect();
+        }
     }
 
     // async getAll (filter = {}) {

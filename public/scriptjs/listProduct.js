@@ -1,13 +1,32 @@
-let url = window.location.origin
 
-fetch(`${url}/api/productos?`, {
-  method: "GET",
+let url = window.location.origin
+let list = {
+  query: `
+    query listarProductos {
+      listarProductosController {
+        id
+        nombre
+        precio
+        foto
+        codigo
+        descripcion
+        timestamp
+        stock
+      }
+    }
+  `
+}
+
+// http://localhost:8080/graphql
+fetch(`${url}/graphql?`, {
+  method: "POST",
   headers: {
     "Content-Type": "application/json",
   },
+  body: JSON.stringify(list)
 })
   .then((res) => res.json())
-  .catch((error) => console.error("Error:", error))
+  // .catch((error) => console.error("Error:", error))
   .then((data) => {
     const renderProduct = Handlebars.compile(
       `
@@ -39,16 +58,51 @@ fetch(`${url}/api/productos?`, {
     );
 
     // console.log("desde el back", data);
-    const html = renderProduct({ products: data });
+    const html = renderProduct({ products: data.data.listarProductosController });
     document.getElementById("listaProductos").innerHTML = html;
   });
 
+  let deleteXID = {
+    query: `
+      mutation eliminarProducto{
+        eliminarProductoController(id:"63734264-bf2f-4a69-aacc-66ffbe0fe0bb"){
+          nombre
+          precio
+          foto
+          codigo
+          descripcion
+          timestamp
+          stock
+        }
+      }
+    `
+  }
 const deleteProduct = (id) => {
-  fetch(`${url}/api/productos/${id}?admin=true`, {
-    method: "DELETE",
+  fetch(`${url}/graphql?`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: `
+        mutation eliminarProducto{
+          eliminarProductoController(id:"${id}"){
+            nombre
+            precio
+            foto
+            codigo
+            descripcion
+            timestamp
+            stock
+          }
+        }
+      `
+    })
   })
+
     .then((res) => res.json())
-    .then(() => {
+    .then((data) => {
+      console.log('DELETE==>',data.data.eliminarProductoController)
       window.location.href = "listadeproductos.html";
     })
     .catch((error) => console.error(error));

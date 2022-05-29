@@ -6,68 +6,52 @@ const {
     actualizarProducto,
     eliminarProducto,
 } = require('../services/productos/productos.service');
-const { STATUS } = require('../utils/constants/api.constants');
-const { apiSuccessResponse } = require('../utils/utils');
+// const { STATUS } = require('../utils/constants/api.constants');
+// const { apiSuccessResponse } = require('../utils/utils');
 
-const listarProductosController = async (req, res) => {
+const listarProductosController = async () => {
     try {
-        const productos = await obtenerProductos();
-        const response = apiSuccessResponse(productos, STATUS.OK);
-        return res.status(STATUS.OK).json(response.data);
+        return await obtenerProductos();
     }
     catch (error) {
-        //en el catch lo que hacemos utilizar el next() para redirigir todos los erores a nuestro middleware de error
-        next(error);
+        console.log('error listando productos ==>',error)
     }
 };
 
-const  listarProductoIdController = async (req, res, next) => {
+const  listarProductoIdController = async ({ id }) => {
     try {
-        const {id} = req.params;
-        const producto = await obtenerProductoXId(id);
-        const response = apiSuccessResponse(producto, STATUS.OK);
-        return res.status(STATUS.OK).json(response.data);
+       return await obtenerProductoXId(id);
     }
     catch (error) {
-        next(error);
+        console.log('error listando productos por ID ==>',error)
     }
 };
 
-const guardarProductoController = async (req , res, next) => {
+const guardarProductoController = async ({ datos }) => {
     try {
-        const newProduct = req.body;
-        const saveProducto = await agregarProducto(newProduct);
-        const response = apiSuccessResponse(saveProducto, STATUS.CREATED);
-        return res.status(STATUS.CREATED).json(response.data);
+        return await agregarProducto(datos);
         // res.redirect('/');
     }
     catch (error) {
-        next(error);
+        console.log('error guardando productos ==>',error)
     }
 };
 
-const actualizarProductoController = async (req, res, next) => {
+const actualizarProductoController = async ({ id, datos }) => {
     try {
-        const {id} = req.params;
-        const newProduct = req.body;
-        const result = await actualizarProducto(newProduct,id);
-        const response = apiSuccessResponse(result, STATUS.OK);
-        return res.status(STATUS.OK).json(response.data);
+        return await actualizarProducto(datos,id);
     }
     catch (error) {
-        next(error);
+        console.log('error actualizando producto ==>',error)
     }
 };
 
-const eliminarProductoController = async (req, res, next) => {
+const eliminarProductoController = async ( { id } ) => {
     try {
-        const {id} = req.params;
-        const result = await eliminarProducto(id);
-        const response = apiSuccessResponse(result, STATUS.OK);
-        return res.status(STATUS.OK).json(response.data);
+        return await eliminarProducto(id);
     }
     catch (error) {
-        next(error);
+        console.log('error eliminando productos ==>',error)
     }
 };
 

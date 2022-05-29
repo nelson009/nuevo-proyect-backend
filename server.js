@@ -8,16 +8,18 @@ const MongoStore = require("connect-mongo");
 const passport = require("./middleware/passport");
 const cluster = require("cluster");
 const logger = require("./logger/loggerConfig");
-
+const RouterProductos = require('./router/app.routers');
+const routerProductos = new RouterProductos();
 // const { mongodb, SESSION_SECRET, args } = require("./config/config");
 const { mongodb, SESSION_SECRET, MODE_CLUSTER } = require("./config/config");
 const MensajeRepository = require('./repositories/mensaje.repository');
 const { obtenerProductos } = require("./services/productos/productos.service");
 
-const rutasApi = require("./router/app.routers");
+// const rutasApi = require("./router/app.routers");
 const ErrorHandling = require("./middleware/errorHandling");
 
 const app = express();
+// primero creamos un servidor http y como parametro le pasamos el servidor de express. Teniendolo de  esta forma podemos integrarlo con tecnologia como websocket
 const server = http.createServer(app);
 const io = require("socket.io")(server);
 // const PORT = args.port
@@ -45,6 +47,7 @@ app.use(
     },
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -55,7 +58,8 @@ app.set("views", __dirname + "/views");
 
 //Rutas
 app.use(peticionServerInfo)
-app.use(rutasApi);
+// app.use(rutasApi);
+app.use('/graphql', routerProductos.start());
 app.use("*", ErrorHandling);
 
 io.on("connection", async (socket) => {
