@@ -1,48 +1,43 @@
-const ProductoSchema = require('../../models/schemas/Producto/Producto.schema');
-const ProductsRepository = require('../../repositories/products.repository');
-const { STATUS } = require('../../utils/constants/api.constants');
-const CustomError = require('../../utils/error/CustomError');
-const productsRepository = new ProductsRepository();
+
+const  ContenedorMemoria  = require('../../models/product/memoria');
+const productosApi = new ContenedorMemoria()
 
 const obtenerProductos = async () => {
-    return await productsRepository.getAll();
+    return productosApi.getProduct();
 };
 
 const obtenerProductoXId = async (id) => {
-    if((!id)) {
-        throw new CustomError(STATUS.BAD_REQUEST, 'el parámetro id no es válido o no existe');
+    const productoId = productosApi.getProductId(id);
+    if (!productoId) {
+        return { error: 'producto no encontrado' };
     }
 
-    return await productsRepository.getId(id);
+    return productoId;
 };
 
 const agregarProducto = async (newProduct) => {
-    await validateProduct(newProduct);
-    return await productsRepository.create(newProduct);
+    if (!newProduct.nombre || !newProduct.precio || !newProduct.foto) {
+        return false;
+    }
+
+    return productosApi.addProduct(newProduct);
 };
 
 const actualizarProducto = async (newProduct, id) => {
-    if(!id) {
-        throw new CustomError(STATUS.BAD_REQUEST, 'el parámetro id no es válido o no existe');
-    }
-    await validateProduct(newProduct);
-    return await productsRepository.update(newProduct, id);
+    const producto =  productosApi.getProductId(id);
+    if (!producto || !newProduct.nombre || !newProduct.precio || !newProduct.foto || !newProduct.descripcion || !newProduct.codigo || !newProduct.stock) {
+        return false;
+    };
+
+    return  productosApi.updateProduct(newProduct, id);
 };
 
 const eliminarProducto = async (id) => {
-    if(!id) {
-        throw new CustomError(STATUS.BAD_REQUEST, 'el parámetro id no es válido o no existe');
-    }
-    return  await productsRepository.delete(id);
-}
-
-const validateProduct = async (product) => {
-    try {
-        await ProductoSchema.validate(product);
-    }
-    catch(error) {
-        throw new CustomError(STATUS.BAD_REQUEST, 'validation error', error);
-    }
+    const productoXId =  productosApi.getProductId(id);
+    if (!productoXId) {
+        return false;
+    };
+    return productosApi.deleteProduct(id);
 }
 
 module.exports = { obtenerProductos, obtenerProductoXId, agregarProducto, actualizarProducto, eliminarProducto };

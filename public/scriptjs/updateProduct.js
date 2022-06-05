@@ -1,5 +1,4 @@
 
-
 const query = window.location.search.substring(1);
 // console.log('windows location',query)
 const id = query.split("=");
@@ -17,23 +16,13 @@ const updateProduct = async () => {
     codigo: document.getElementById('codigo').value,
     }
 
-    fetch(`${url}/graphql?`, {
-        method: 'POST',
+    fetch(`${url}/api/productos/${i}?admin=true`, {
+        method: 'PUT',
         headers: {
             "Content-Type": "application/json;charset=utf-8",
         },
-        body: JSON.stringify({
-            query: `
-            mutation actualizarProducto{
-                actualizarProductoController(id:"${i}",datos:{nombre:"${update.nombre}", precio:${update.precio},foto:"${update.foto}",descripcion:"${update.descripcion}",codigo:"${update.codigo}",stock:${update.stock}}) {
-                  nombre
-                  precio
-                }
-            }
-            `
-        })
+        body: JSON.stringify(update)
     })
-
     .then(res => res.json())
     .then(res => console.log('post data',res))
     .then(() => {
@@ -41,34 +30,19 @@ const updateProduct = async () => {
     })
 } 
 
-fetch(`${url}/graphql?`, {
-    method: 'POST', 
+fetch(`${url}/api/productos/${i}`, {
+    method: 'GET', 
     headers:{
         'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        query: `
-        query productoXID{
-            listarProductoIdController(id: "${i}"){
-                id
-                nombre
-                precio
-                foto
-                codigo
-                descripcion
-                stock
-            }
-          }
-        `
-    })
-})
+}})
 .then(res => res.json())
 .then(data => {
-    let productxID = data.data.listarProductoIdController
-    document.getElementById('nombre').value = productxID.nombre 
-    document.getElementById('precio').value = productxID.precio 
-    document.getElementById('foto').value = productxID.foto 
-    document.getElementById('descripcion').value = productxID.descripcion 
-    document.getElementById('stock').value = productxID.stock 
-    document.getElementById('codigo').value = productxID.codigo 
+    // console.log('UPDATE',data)
+ 
+    document.getElementById('nombre').value = data.nombre 
+    document.getElementById('precio').value = data.precio 
+    document.getElementById('foto').value = data.foto 
+    document.getElementById('descripcion').value = data.descripcion 
+    document.getElementById('stock').value = data.stock 
+    document.getElementById('codigo').value = data.codigo 
 })

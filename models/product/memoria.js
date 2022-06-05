@@ -1,9 +1,7 @@
-
-const { obtenerIndice } = require('../../utils/funcionesUtiles/funciones');
+const {generadorId, obtenerIndice} = require('../../utils/funcionesUtiles/funciones');
 const { STATUS } = require('../../utils/constants/api.constants');
 const CustomError = require('../../utils/error/CustomError');
 const ProductoDTO = require('../dtos/producto.dto');
-const { v4: uuid } = require( 'uuid' ); 
 
 class ContenedorMemoria {
     constructor(){
@@ -11,7 +9,7 @@ class ContenedorMemoria {
     }
 
     findProductXId (Products,id) {
-        const foundProduct = Products.find(ele => ele.id === id);
+        const foundProduct = Products.find(ele => ele.id === +id);
         if (!foundProduct) {
             throw new CustomError(
                 STATUS.NOT_FOUND,
@@ -22,7 +20,7 @@ class ContenedorMemoria {
     }
 
     getProduct(){
-        console.log('LISTA PRODUCTOS', this.Products)
+        
         return this.Products;
     };
 
@@ -35,14 +33,12 @@ class ContenedorMemoria {
         //     );
         // }
         const  producto = this.findProductXId(this.Products, id);
-        console.log('id producto', producto)
         return producto;
     };
 
     addProduct(Product){
         try {
-            const id = uuid();
-            const nuevoProducto = new ProductoDTO(Product,id);
+            const nuevoProducto = new ProductoDTO(Product, generadorId(this.Products, this.Products[0]));
             this.Products.push(nuevoProducto);
             console.log('NUEVO PRODUCTO', nuevoProducto)
             return nuevoProducto;
