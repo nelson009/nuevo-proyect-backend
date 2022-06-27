@@ -1,0 +1,22 @@
+[
+  {
+    "nombre": "LG",
+    "descripcion": "tv",
+    "codigo": 5,
+    "precio": 500,
+    "foto": "https://images.fravega.com/f300/654f64238a932795128e5445ad1f8ed6.jpg.webp",
+    "stock": 5,
+    "timestamp": 1652995439964,
+    "id": 2
+  },
+  {
+    "nombre": "sony",
+    "descripcion": "tv",
+    "codigo": "10",
+    "precio": "3000",
+    "foto": "https://images.fravega.com/f300/654f64238a932795128e5445ad1f8ed6.jpg.webp",
+    "stock": "20",
+    "timestamp": 1652996416288,
+    "id": 3
+  }
+]

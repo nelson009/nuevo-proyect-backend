@@ -1,0 +1,14 @@
+
+{{>headInfo title="Logout"}}
+    <section class="jumbotron container">
+        {{#if firstName}}
+        <div class= "alert alert-primary">
+            <h2> Hasta luego {{firstName}}</h2>
+        </div>
+        {{/if}}
+    </section>
+    <script>setTimeout(() => {
+        location.href = "/login";
+        },1000*2)
+    </script>
+{{> footer}}

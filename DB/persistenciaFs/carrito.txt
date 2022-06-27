@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "timestamp": 1644900822508,
+  "productos": [
+    {
+      "nombre": "lg",
+      "precio": "22222",
+      "foto": "https://images.fravega.com/f300/654f64238a932795128e5445ad1f8ed6.jpg.webp",
+      "descripcion": "tv",
+      "stock": "22",
+      "codigo": "11",
+      "timestamp": 1655853492638,
+      "id": 1
+    }
+  ]
+}
