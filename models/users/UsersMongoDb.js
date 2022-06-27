@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { mongodb, CORREO_GMAIL, configTransport } = require('../../config/config');
+const { CORREO_GMAIL, configTransport } = require('../../config/config');
 const { createTransport } = require('nodemailer');
 const path = require("path");
 const logger = require("../../logger/loggerConfig");
